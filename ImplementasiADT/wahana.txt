@@ -1,0 +1,12 @@
+1;1;Merry-go-round;10;100,100,100,100;5;10;Pusing-pusing muter, tapi asyik;2,3
+2;2;Merry-go-square;12;120,120,120,120;4;12;Pusing-pusing muter, tapi ngotak;5
+3;2;Merry-go-triangle;15;150,70,80,90;7;13;Pusing-pusing muter, tapi segitiga;6
+4;1;Rumah Hantu;8;80,70,90,100;10;10;hanya untuk anda yang pemberani;7,8,9
+5;2;Merry-go-jek;20;200,200,270,300;4;15;Pusing-pusing muter, tapi tetap jaga protokol kesehatan;
+6;2;Merry-go-tong-royong;24;200,200,360,230;11;16;Pusing-pusing muter, tapi ayo kerja bakti;
+7;2;Rumah Mumi;10;100,200,70,25;9;9;bentuknya piramida;10
+8;2;Rumah Vampir;14;100,56,330,82;12;6;makanan di sini hambar karena gak ada bawang putih;11
+9;2;Rumah Zombie;9;100,109,124,302;3;11;jangan khawatir, mereka tidak akan memakanmu;12
+10;2;Rumah sakit;30;600,255,332,522;9;20;eh salah, anyway, ada BPJS?;
+11;2;Rumahmu;27;566,244,216,422;13;19;ya ampun, rumahmu lebih horor dari rumah hantu;
+12;2;Rumah mantan;48;700,226,333,533;20;10;natsukashii na?;
