@@ -30,12 +30,16 @@ void printDalamFormatWaktu(Waktu waktu);
 /**************KELOMPOK OPERASI ARITMETIKA *****************/
 Waktu tambahWaktu(Waktu waktu1, Waktu waktu2);
 
-void tambahWaktuManual(Waktu waktu, int jam, int menit);
+void tambahWaktuManualP(Waktu waktu, int jam, int menit);
+
+Waktu tambahWaktuManualF(Waktu waktu, int jam, int menit);
 
 void tambahWaktuMainADTWaktu(Waktu waktu);
 
 void tambahWaktuMainManual(int jam, int menit);
 
 Waktu selisihTerhadapWaktuMain(Waktu waktu);
+
+boolean diMainPhase(Waktu waktu);
 
 #endif

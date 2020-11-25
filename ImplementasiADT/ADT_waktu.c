@@ -47,12 +47,25 @@ Waktu tambahWaktu(Waktu waktu1, Waktu waktu2){
 	return waktu3;
 }
 
-void tambahWaktuManual(Waktu waktu, int jam, int menit){
+void tambahWaktuManualP(Waktu waktu, int jam, int menit){
 	int lebih;
 	Menit(waktu) += menit; 
 	lebih = Menit(waktu) / 60;
 	Menit(waktu) %= 60;
 	Jam(waktu) += (lebih + jam);
+}
+
+Waktu tambahWaktuManualF(Waktu waktu, int jam, int menit){
+	int lebih;
+	Waktu waktuHasil;
+	int menitHasil;
+	int jamHasil;
+	menitHasil = menit + Menit(waktu); 
+	lebih = menitHasil / 60;
+	menitHasil = menitHasil % 60;
+	jamHasil = lebih + jam + Jam(waktu);
+	setWaktu(&waktuHasil, jamHasil, menitHasil);
+	return(waktuHasil);
 }
 
 void tambahWaktuMainADTWaktu(Waktu waktu) {
@@ -88,4 +101,6 @@ Waktu selisihTerhadapWaktuMain(Waktu waktu) {
     }
     return hasilSelisih;
 }
-
+boolean diMainPhase(Waktu waktu){
+	return((Jam(waktu) >= 9) && (Jam(waktu) < 21));
+}

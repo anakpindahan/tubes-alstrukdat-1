@@ -5,7 +5,7 @@
 #include "boolean.h"
 
 typedef struct {
-    char TabKata[50];
+    char TabKata[100];
     int Length;
 } Kata;
 
