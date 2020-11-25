@@ -12,6 +12,8 @@ typedef struct {
 /*****************KONSTRUKTOR*********************/
 Kata createKata(char string[]);
 
+Kata readInput();
+
 /*****************PENGECEKAN*********************/
 boolean isKataSama(Kata kata1, Kata kata2);
 

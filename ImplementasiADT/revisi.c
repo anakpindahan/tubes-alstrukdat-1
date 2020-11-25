@@ -363,9 +363,8 @@ int main() {
 
     do {
         printf("\n");
-        scanf("%s", k_perintah);
 
-        Perintah = createKata(k_perintah);
+        Perintah = readInput();
 
         if (isKataSama(kata_w,Perintah)) {
             if (SekitaranPemain.W == '-') {

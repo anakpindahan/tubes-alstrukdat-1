@@ -1,6 +1,6 @@
 typedef struct {
-    Peta* AsalKuadranPeta;
     Peta* TargetKuadranPeta;
+    Peta* AsalKuadranPeta;
     char InputArah;
 } Garis;
 
@@ -9,3 +9,4 @@ typedef struct {
 } GrafPeta;
 
 GrafPeta GrafUntukPeta;
+

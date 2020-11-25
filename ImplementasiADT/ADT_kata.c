@@ -23,6 +23,22 @@ Kata createKata(char string[]){
     return kataBaru;
 }
 
+Kata readInput() {
+    char CC; int i = 0;
+    Kata kata;
+
+     do {
+        scanf("%c",&CC);
+        if (CC != '\n') {
+            kata.TabKata[i] = CC;
+            i++;
+        }
+    } while (CC != '\n');
+
+    kata.Length = i;
+    return kata;
+}
+
 /*****************PENGECEKAN*********************/
 boolean isKataSama(Kata kata1, Kata kata2) {
     boolean sama;
