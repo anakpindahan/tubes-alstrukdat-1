@@ -4,6 +4,7 @@
 #define TREE_H
 
 #include "boolean.h"
+#include "ADT_linkedlist.h"
 
 #define Nil NULL
 
@@ -12,29 +13,28 @@ typedef int TupelUp[6];
 // BahanBangunan1, BahanBangunan2, BahanBangunan3), dan ID Wahana yang diupgrade (0 jika ini wahana dasar)
 
 
-typedef struct tNode *address;
+typedef struct tNode *addressNode;
 
 typedef struct tNode{
 	TupelUp CWahana;
-	address FirstUpWahana;
-	address WahanaSetara;
+	addressNode Left;
+	addressNode Right;
 } Node;
 
-typedef struct{
-	address WahanaDasar;
-} Tree;
+typedef addressNode Tree;
 
 // Tree bersifat generic tree yang diimplementasikan dengan binary tree
 // CWahana bersifat tupel isi enam elemen seperti yang sudah dijelaskan
-// FirstUpWahana adalah salah satu wahana hasil upgrade dari wahana ini
-// WahanaSetara adalah salah satu wahana hasil upgrade wahana W1 dengan salah satu hasil upgrade W1 yang
-// lain adalah CWahana
+// Jika CWahana hanya dapat diupgrade menjadi wahana W1, maka W1 akan menjadi leftchild dari CWahana
+// Jika CWahana punya dua wahana hasil upgrade, salah satunya akan menjadi leftchild dari CWahana
+// Sementara, wahan yang lain akan menjadi right child dari leftchild CWahana tadi
+// Dengan kata lain, leftchild menunjukkan salah satu hasil upgrade wahana dan rightchild menunjukkan
+// wahana yang dapat diupgrade dari wahana yang sama
 
 /***********SELEKTOR***********/
 #define InfoWahana(P) (P)->CWahana
-#define FUW(P) (P)->FirstUpWahana
-#define WS(P) (P)->WahanaSetara
-#define WD(T) (T).WahanaDasar
+#define Left(P) (P)->Left
+#define Right(P) (P)->Right
 #define IDWahana(P) InfoWahana(P)[0]
 
 /*********PREDIKAT************/
@@ -42,24 +42,36 @@ boolean TreeKosong(Tree T);
 
 boolean TreeSatuElemen(Tree T);
 
-boolean MaxUpgrade(address Wahana);
+boolean UnerLeft(Tree T);
 
-boolean SatuUpgrade(address Wahana);
+boolean UnerRight(Tree T);
 
 /********KONSTRUKTOR**********/
-void BuatTree(TupelUp wahana, Tree Anak, Tree Saudara, Tree* T);
+void BuatTreeP(TupelUp wahana, Tree Anak, Tree Saudara, Tree* T);
+
+Tree BuatTreeF(TupelUp wahana, Tree Anak, Tree Saudara);
 
 /**********MANAJEMEN MEMORI***********/
-address AlokasiAddress(TupelUp wahana);
+addressNode AlokasiAddress(TupelUp wahana);
 
-void DealokasiAddress(address P);
+void DealokasiAddress(addressNode P);
 
 /************TRAVERSAL************/
-address SearchWahanaDenganIndeks(int idx, address P);
+boolean SearchEksistensiIndeks(Tree T, int idx);
+// Mengecek apakah ada address node di T yang memuat indeks idx
 
-address Predecessor(address Wahana, Tree T);
+addressNode SearchWahanaDenganIndeks(Tree T, int idx);
+// Prasyarat: setiap address node di T memuat indeks yang berbeda dan pasti ada yang nilai indeksnya idx
 
-void TambahUpgrade(address Wahana, address newUpgrade, Tree T);
+addressNode Predecessor(addressNode Wahana, Tree T);
+// Mencari wahana yang apabila diupgrade akan menghasilkan Wahana
+
+void TambahUpgrade(int idx, TupelUp NewUp, Tree T);
+
+LinkedList KemungkinanUpgrade(Tree T);
+// Membuat list semua kemungkinan upgrade yang mungkin dari sebuah wahana
+
+
 
 #endif
 

@@ -10,83 +10,163 @@
 /*********PREDIKAT************/
 boolean TreeKosong(Tree T)
 {
-	return(WD(T) == Nil);
+	return(T == Nil);
 }
 
 boolean TreeSatuElemen(Tree T)
 {
 	if(!TreeKosong(T)){
-		return((FUW(WD(T)) == Nil) && (WS(WD(T)) == Nil));
+		return((Left(T) == Nil) && (Right(T) == Nil));
 	}
 }
 
-boolean MaxUpgrade(address Wahana)
+boolean UnerLeft(Tree T)
 {
-	return(FUW(Wahana) == Nil);
+	return(Right(T) == Nil);
 }
 
-boolean SatuUpgrade(address Wahana)
+boolean UnerRight(Tree T)
 {
-	return(!MaxUpgrade(Wahana) && (WS(Wahana) == Nil));
+	return(Left(T) == Nil);
 }
 
 /********KONSTRUKTOR**********/
-void BuatTreeKosong(Tree* T)
+void BuatTreeP(TupelUp wahana, Tree Anak, Tree Saudara, Tree* T)
 {
-	WD(*T) = Nil;
+	/*KAMUS*/
+	int i;
+	/*ALGORITMA*/
+	*T = (Node *) malloc(sizeof(Node));
+	if(*T != Nil){
+		for(i = 0; i < 6; i++){
+			InfoWahana(*T)[i] = wahana[i];
+		}
+		Left(*T) = Anak;
+		Right(*T) = Saudara; 
+	}
 }
 
-/**********MANAJEMEN MEMORI***********/
-address AlokasiAddress(TupelUp wahana)
+Tree BuatTreeF(TupelUp wahana, Tree Anak, Tree Saudara)
 {
 	int i;
-	address P;
+	Tree T;
+	T = (Node *) malloc(sizeof(Node));
+	if(T != Nil){
+		for(i = 0; i < 6; i++){
+			InfoWahana(T)[i] = wahana[i];
+		}
+		Left(T) = Anak;
+		Right(T) = Saudara; 
+	}
+}
+/**********MANAJEMEN MEMORI***********/
+addressNode AlokasiAddressTree(TupelUp wahana)
+{
+	int i;
+	addressNode P;
 	P = (Node*) malloc(sizeof(Node));
 	if(P != Nil){
 		for(i = 0; i < 6; i++){
 			InfoWahana(P)[i] = wahana[i];
 		}
-		FUW(P) = Nil;
-		WS(P) = Nil;
+		Left(P) = Nil;
+		Right(P) = Nil;
 	}
 	return(P);
 }
 
-void DealokasiAddress(address P)
+void DealokasiAddressTree(addressNode P)
 {
 	free(P);
 }
 
 /************TRAVERSAL************/
-address SearchWahanaDenganIndeks(int idx, address P)
+boolean SearchEksistensiIndeks(Tree T, int idx)
+// Mengecek apakah ada address node di T yang memuat indeks idx
 {
-	if(P == Nil){
-		return Nil;
-	} else if(IDWahana(P) == idx){
-		return P;
-	} else if(SearchWahanaDenganIndeks(idx, FUW(P)) != Nil){
-		return(SearchWahanaDenganIndeks(idx, FUW(P)));
+	/*KAMUS*/
+	/*ALGORITMA*/
+	if(TreeKosong(T)){
+		return(false);
+	} else if(TreeSatuElemen(T)) {
+		return(IDWahana(T) == idx);
 	} else {
-		return(SearchWahanaDenganIndeks(idx, WS(P)));
-	}
+		return(SearchEksistensiIndeks(Left(T), idx) || SearchEksistensiIndeks(Right(T), idx));
+	}	
 }
+addressNode SearchWahanaDenganIndeks(Tree T, int idx)
+// Prasyarat: setiap address node di T memuat indeks yang berbeda dan pasti ada yang nilai indeksnya idx
 
-address Predecessor(address Wahana, Tree T)
 {
-	return(SearchWahanaDenganIndeks(InfoWahana(Wahana)[5], WD(T)));
-}
-
-void TambahUpgrade(address Wahana, address newUpgrade, Tree T)
-{
-	if(MaxUpgrade(Wahana)){
-		FUW(Wahana) = newUpgrade;
-	} else if(SatuUpgrade(Wahana)){
-		WS(Wahana) = newUpgrade;
+	/*KAMUS*/
+	/*ALGORITMA*/
+	if(IDWahana(T) == idx){
+		return(T);
 	} else {
-		address P = WS(Wahana);
-		while(WS(P) != Nil){
-			P = WS(P);
+		if(SearchEksistensiIndeks(Left(T), idx)){
+			return(SearchWahanaDenganIndeks(Left(T), idx));
+		} else {
+			return(SearchWahanaDenganIndeks(Right(T), idx));
 		}
-		WS(P) = newUpgrade;
 	}
+}
+
+addressNode Predecessor(addressNode Wahana, Tree T)
+// Mencari wahana yang apabila diupgrade akan menghasilkan Wahana
+{
+	return(SearchWahanaDenganIndeks(T, InfoWahana(Wahana)[5]));
+}
+
+void TambahUpgrade(int idx, TupelUp NewUp, Tree T)
+// I.S. T terdefinisi dan memuat sebuah wahana yang memiliki indeks idx
+// F.S. Terbentuk daun baru yang merupakan left dari wahana berindeks idx jika wahana ini belum memiliki upgrade
+// dan menjadi right child dari wahana terakhir hasil upgrade wahana berindeks idx
+{
+	/*KAMUS*/
+	addressNode Node;
+	Tree tempWahana;
+	/*ALGORITMA*/
+	Node = AlokasiAddressTree(NewUp);
+	if(Node != Nil){
+		if(IDWahana(T) == idx){
+			if(TreeSatuElemen(T)){
+				Left(T) = Node;
+			} else if(UnerLeft(T)){
+				Right(Left(T)) = Node;
+			} else {
+				tempWahana = Left(T);
+				while(Right(tempWahana) != Nil){
+					tempWahana = Right(tempWahana);
+				}
+				Right(tempWahana) = Node;
+			}
+		} else {
+			if(SearchEksistensiIndeks(Left(T), idx)){
+				TambahUpgrade(idx, NewUp, Left(T));
+			} else {
+				TambahUpgrade(idx, NewUp, Right(T));
+			}
+		}
+	}
+	
+	
+	
+LinkedList KemungkinanUpgrade(Tree T)
+// Membuat list semua kemungkinan upgrade yang mungkin dari sebuah wahana
+{
+	LinkedList LL;
+	Tree Tup;
+	BuatLL(&LL);
+	if(TreeSatuElemen(T)){
+		return(LL);
+	} else {
+		Tup = Left(T);
+		InsVLast(&LL, IDWahana(Tup));
+		while(Right(Tup) != Nil){
+			Tup = Right(Tup);
+			InsVLast(&LL, IDWahana(Tup));
+		}
+		return(LL);
+	}
+}	
 }

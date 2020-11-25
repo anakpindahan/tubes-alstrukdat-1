@@ -8,6 +8,7 @@
 #include "ADT_tree.c"
 #include "ADT_Peta.c"
 #include "ADT_GrafPeta.c"
+#include "ADT_linkedlist.c"
 
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
@@ -775,10 +776,10 @@ int main() {
             	printf("Masukin yang bener\n");
             	scanf("%d", &Tipe);
 			}
-			printf("Mau beli berapa?");
+			printf("Mau beli berapa?\n");
 			scanf("%d", &Jumlah);
 			printf("Baik, akan segera diproses\n");
-			printf("Mohon tunggu beberapa saat\n");
+			printf("Jangan lupa untuk mengeksekusi\n");
             int tupelBuy[9];
             tupelBuy[0] = 3;
             tupelBuy[1] = 0;
@@ -841,7 +842,9 @@ int main() {
 						Inventaris.BahanBangunan3 += X[5];
 						Inventaris.Uang += X[2];
 						tambahWaktuMainManual(0, 20);
+						printf("Selamat, Anda telah berhasil membeli barang\n");
 						break;
+						
 				}
 				HutangUang = 0;
 				HutangBB1 = 0;
@@ -849,12 +852,13 @@ int main() {
 				HutangBB3 = 0;
 				setWaktu(&durasiExecute, 0, 0);
 			}
-		} else if(isKataSama(kata_undo, Perintah)){
+		} else if(isKataSama(kata_undo, Perintah) && !diMainPhase(WaktuMain)){
 			Tupel X;
 			if(StackKosong(DaftarPerintah)){
 				printf("Anda tidak memiliki perintah yang dapat diundo");
 			} else {
 				Pop(&DaftarPerintah, &X);
+				printf("Anda telah berhasil membatalkan perintah terakhir\n");
 			}
 		} else if(isKataSama(kata_office, Perintah)){
 
