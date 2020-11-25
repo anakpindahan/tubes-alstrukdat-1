@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <windows.h>
 #include "boolean.h"
-#include "ADT_waktu.h"
-#include "ADT_kata.h"
-#include "ADT_stack.h"
-#include "ADT_tree.h"
+#include "ADT_waktu.c"
+#include "ADT_kata.c"
+#include "ADT_stack.c"
+#include "ADT_tree.c"
+#include "ADT_Peta.c"
+#include "ADT_GrafPeta.c"
 
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
@@ -21,15 +23,13 @@ void printStage() {
         printf("Pembukaan Wahana Hari ke-%d\n\n", GameStage.Day);
     }
 }
- 
+
 typedef struct {
     int X;
     int Y;
 } Poin;
 
-typedef struct {
-	char Isi[5][5];
-} Peta;
+
 
 typedef struct {
     Poin PosisiPemain;
@@ -71,17 +71,7 @@ typedef struct{
 
 WahanaDibangun ListWahanaDibangun[25];
 
-typedef struct {
-    Peta* AsalKuadranPeta;
-    Peta* TargetKuadranPeta;
-    char InputArah;
-} Garis;
 
-typedef struct {
-    Garis Edge[8];
-} GrafPeta;
-
-GrafPeta GrafUntukPeta;
 
 typedef struct {
     char W;
@@ -103,9 +93,9 @@ void printPeta() {
     int i,j;
 
     i = 0;
-    for (i; i < 5; i++) {
+    for (i; i < Ukuran_Peta; i++) {
         j = 0;
-        for (j; j < 5; j++) {
+        for (j; j < Ukuran_Peta; j++) {
             printf("%c", DataPemain.KuadranPeta->Isi[i][j]);
         }
         printf("\n");
@@ -140,87 +130,19 @@ int main() {
     int i,j;
     char ch;
 
-    filePointer = fopen("kuadran1.txt", "r");
+    bacaPeta("kuadran1.txt",&petaKuadran1);
 
-    if (filePointer == NULL) {
-        printf("File tidak ditemukan\n");
-    }
-    else {
-        i = 0;
-        for (i; i < 5; i++) {
-            j = 0;
-            for (j; j < 5; j++) {
-                ch = fgetc(filePointer);
-                petaKuadran1.Isi[i][j] = ch;
-            }
-            ch = fgetc(filePointer);
-        }
-    }
+    bacaPeta("kuadran2.txt",&petaKuadran2);
 
-    fclose(filePointer);
+    bacaPeta("kuadran3.txt",&petaKuadran3);
 
-    filePointer = fopen("kuadran2.txt", "r");
-
-    if (filePointer == NULL) {
-        printf("File tidak ditemukan\n");
-    }
-    else {
-        i = 0;
-        for (i; i < 5; i++) {
-            j = 0;
-            for (j; j < 5; j++) {
-                ch = fgetc(filePointer);
-                petaKuadran2.Isi[i][j] = ch;
-            }
-            ch = fgetc(filePointer);
-        }
-    }
-
-    fclose(filePointer);
-
-    filePointer = fopen("kuadran3.txt", "r");
-
-    if (filePointer == NULL) {
-        printf("File tidak ditemukan\n");
-    }
-    else {
-        i = 0;
-        for (i; i < 5; i++) {
-            j = 0;
-            for (j; j < 5; j++) {
-                ch = fgetc(filePointer);
-                petaKuadran3.Isi[i][j] = ch;
-            }
-            ch = fgetc(filePointer);
-        }
-    }
-
-    fclose(filePointer);
-
-    filePointer = fopen("kuadran4.txt", "r");
-
-    if (filePointer == NULL) {
-        printf("File tidak ditemukan\n");
-    }
-    else {
-        i = 0;
-        for (i; i < 5; i++) {
-            j = 0;
-            for (j; j < 5; j++) {
-                ch = fgetc(filePointer);
-                petaKuadran4.Isi[i][j] = ch;
-            }
-            ch = fgetc(filePointer);
-        }
-    }
-
-    fclose(filePointer);
+    bacaPeta("kuadran4.txt",&petaKuadran4);
 
     ///// ///// ///// ///// /////
 	Wahana wahana;
 	Wahana ListWahana[25];
 	int BanyakWahana = 0;
-	
+
     char buff[255];
     char* token, *tokenSec;
 
@@ -283,13 +205,13 @@ int main() {
 			i++;
 			BanyakWahana++;
 		}
-		
+
     }
 
     fclose(filePointer);
-	
+
     int BanyakWahanaDibangun = 0;
-    
+
 /*    for(i = 0; i < BanyakWahana; i++){
     	printf("%d %d ", ListWahana[i].Indeks, ListWahana[i].Tipe);
     	printKata(ListWahana[i].Nama);
@@ -392,13 +314,13 @@ int main() {
     setWaktu(&durasiExecute, 0, 0);
 
     ///// ///// ///// ///// /////
-    
+
     Stack DaftarPerintah;
     Stack DaftarPerintahExec;
     BuatStack(&DaftarPerintah);
     BuatStack(&DaftarPerintahExec);
-    
-    //// //// ///// ///// ////// 
+
+    //// //// ///// ///// //////
 
     Kata Perintah;
 
@@ -436,7 +358,7 @@ int main() {
     Waktu selisih = selisihTerhadapWaktuMain(waktuBuka);
     printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
     update();
-	
+
     ///// ///// ///// ///// /////
 
     do {
@@ -455,7 +377,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.W == '^') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.Y = 3;
+                DataPemain.PosisiPemain.Y = Map_Y_Max;
                 pindahPeta(Perintah, DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -502,7 +424,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.A == '<') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.X = 3;
+                DataPemain.PosisiPemain.X = Map_X_Max;
                 pindahPeta(Perintah,DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -549,7 +471,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.S == 'V') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.Y = 1;
+                DataPemain.PosisiPemain.Y = Map_X_Min;
                 pindahPeta(Perintah,DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -596,7 +518,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.D == '>') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.X = 1;
+                DataPemain.PosisiPemain.X = Map_X_Min;
                 pindahPeta(Perintah,DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -674,7 +596,7 @@ int main() {
             if (diMainPhase(WaktuMain)) {
 				printf("Hanya bisa membangun pada saat preparation phase\n");
             } else if(SekitaranPemain.A == '<' || SekitaranPemain.D == '>' || SekitaranPemain.W == '^' || SekitaranPemain.S == 'V'){
-                printf("Tidak bisa membangun di sini\n");            	
+                printf("Tidak bisa membangun di sini\n");
 			} else if(diMainPhase(tambahWaktu(WaktuMain, tambahWaktuManualF(durasiExecute, 0, 10)))){
 				printf("Waktu eksekusi tidak akan mencukupi\n");
 			} else {
@@ -684,7 +606,7 @@ int main() {
             	int i;
             	for(i = 0; i < BanyakWahana; i++){
             		if(ListWahana[i].Tipe == 1){
-            			printf("%d. ", ListWahana[i].Indeks); 
+            			printf("%d. ", ListWahana[i].Indeks);
 						printKata(ListWahana[i].Nama);
 						printf("\n");
             			printf("Harga yang perlu dibayar adalah %d Lungmen Dollar,", ListWahana[i].HargaBangun.Uang);
@@ -872,11 +794,11 @@ int main() {
 				tupelBuy[2] += -5*Jumlah;
 			} else if(Tipe == 2){
 				tupelBuy[4] += Jumlah;
-				tupelBuy[2] += -7*Jumlah;				
+				tupelBuy[2] += -7*Jumlah;
 			} else if(Tipe == 3){
 				tupelBuy[5] += Jumlah;
-				tupelBuy[2] += -9*Jumlah;				
-			} 
+				tupelBuy[2] += -9*Jumlah;
+			}
 	        Push(&DaftarPerintah, tupelBuy);
             tambahWaktuManualP(durasiExecute, 0, 20);
 		} else if(isKataSama(kata_repair, Perintah)){
@@ -926,7 +848,7 @@ int main() {
 				HutangBB2 = 0;
 				HutangBB3 = 0;
 				setWaktu(&durasiExecute, 0, 0);
-			}				
+			}
 		} else if(isKataSama(kata_undo, Perintah)){
 			Tupel X;
 			if(StackKosong(DaftarPerintah)){
@@ -935,7 +857,7 @@ int main() {
 				Pop(&DaftarPerintah, &X);
 			}
 		} else if(isKataSama(kata_office, Perintah)){
-			
+
 		} else if(isKataSama(kata_serve, Perintah)){
 
 		} else if(isKataSama(kata_repair, Perintah)){
@@ -949,7 +871,7 @@ int main() {
 
             system("cls");
             printStage();
-            printPeta();
+            printPeta(11);
             printInventaris();
             printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
 
