@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include "boolean.h"
-#include "ADT_waktu.c"
-#include "ADT_kata.c"
-#include "ADT_stack.c"
-#include "ADT_tree.c"
-#include "ADT_Peta.c"
-#include "ADT_GrafPeta.c"
-#include "ADT_linkedlist.c"
+#include "src/Boolean/boolean.h"
+#include "src/Waktu/ADT_waktu.c"
+#include "src/Kata/ADT_kata.c"
+#include "src/Stack/ADT_stack.c"
+#include "src/Tree/ADT_tree.c"
+#include "src/Peta/ADT_Peta.c"
+#include "src/GrafPeta/ADT_GrafPeta.c"
+#include "src/LinkedList/ADT_linkedlist.c"
 
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
@@ -29,8 +29,6 @@ typedef struct {
     int X;
     int Y;
 } Poin;
-
-
 
 typedef struct {
     Poin PosisiPemain;
@@ -59,7 +57,7 @@ typedef struct {
 	int Durasi;
 	int Kapasitas;
 	Kata Deskripsi;
-	int Upgrade[6];
+	int Upgrade;
 } Wahana;
 
 typedef struct{
@@ -68,6 +66,7 @@ typedef struct{
 	int Kerusakan;
 	Kata Nama;
 	Inventory HargaBangun;
+	LinkedList HistoriUpgrade;
 } WahanaDibangun;
 
 WahanaDibangun ListWahanaDibangun[25];
@@ -192,14 +191,9 @@ int main() {
 
     		token = strtok(NULL, ";");
     		if(token != NULL){
-    			int j = 0;
-    			tokenSec = strtok(token, ",");
-    			wahana.Upgrade[j] = atoi(tokenSec);
-				while(tokenSec != NULL){
-					tokenSec = strtok(NULL, ",");
-					j++;
-					wahana.Upgrade[j] = atoi(tokenSec);
-				}
+    			wahana.Upgrade = atoi(token);
+			} else {
+				wahana.Upgrade = 0;
 			}
 
 			ListWahana[i] = wahana;
@@ -212,6 +206,42 @@ int main() {
     fclose(filePointer);
 
     int BanyakWahanaDibangun = 0;
+    
+    /////////////////////////////////
+    
+    Tree TreeUpgrade;
+    TupelUp DummyUpgrade;
+    TupelUp NewUp;
+    DummyUpgrade[0] = 0;
+    DummyUpgrade[1] = 0;
+    DummyUpgrade[2] = 0;
+    DummyUpgrade[3] = 0;
+    DummyUpgrade[4] = 0;
+    DummyUpgrade[5] = 0;
+    
+    TreeUpgrade = BuatTreeF(DummyUpgrade, Nil, Nil);
+    
+    for(i = 0; i < BanyakWahana; i++){
+    	if(ListWahana[i].Tipe == 1){
+    		NewUp[0] = ListWahana[i].Indeks;
+    		NewUp[1] = ListWahana[i].HargaBangun.Uang;
+    		NewUp[2] = ListWahana[i].HargaBangun.BahanBangunan1;
+    		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
+    		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
+    		NewUp[5] = 0;
+    		TambahUpgrade(0, NewUp, TreeUpgrade);
+		} else {
+    		NewUp[0] = ListWahana[i].Indeks;
+    		NewUp[1] = ListWahana[i].HargaBangun.Uang;
+    		NewUp[2] = ListWahana[i].HargaBangun.BahanBangunan1;
+    		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
+    		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
+    		NewUp[5] = ListWahana[i].Upgrade;			
+			TambahUpgrade(ListWahana[i].Upgrade, NewUp, TreeUpgrade);
+		}
+	}
+    
+    
 
 /*    for(i = 0; i < BanyakWahana; i++){
     	printf("%d %d ", ListWahana[i].Indeks, ListWahana[i].Tipe);
@@ -597,6 +627,8 @@ int main() {
 				printf("Hanya bisa membangun pada saat preparation phase\n");
             } else if(SekitaranPemain.A == '<' || SekitaranPemain.D == '>' || SekitaranPemain.W == '^' || SekitaranPemain.S == 'V'){
                 printf("Tidak bisa membangun di sini\n");
+			} else if(DataPemain.SimbolPetak == 'O'){
+				printf("Tidak bisa membangun di kantor\n");	
 			} else if(diMainPhase(tambahWaktu(WaktuMain, tambahWaktuManualF(durasiExecute, 0, 10)))){
 				printf("Waktu eksekusi tidak akan mencukupi\n");
 			} else {
@@ -641,7 +673,7 @@ int main() {
 							HutangBB2 -= tupelBuild[4];
 							HutangBB3 -= tupelBuild[5];
 		                	Push(&DaftarPerintah, tupelBuild);
-							printf("SJJAKSN\n");
+							printf("Perintah untuk membangun sudah dimasukkan ke stack perintah\n");
 		                	tambahWaktuManualP(durasiExecute, 1, 0);
 						}
 					}
