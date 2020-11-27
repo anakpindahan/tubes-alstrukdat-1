@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include "boolean.h"
-#include "ADT_waktu.c"
-#include "ADT_kata.c"
-#include "ADT_stack.c"
-#include "ADT_tree.c"
-#include "ADT_Peta.c"
-#include "ADT_GrafPeta.c"
+#include "./src/Boolean/boolean.h"
+#include "./src/Waktu/ADT_waktu.c"
+#include "./src/Kata/ADT_kata.c"
+#include "./src/Stack/ADT_stack.c"
+#include "./src/Tree/ADT_tree.c"
+#include "./src/Peta/ADT_Peta.c"
+#include "./src/GrafPeta/ADT_GrafPeta.c"
+#include "./src/LinkedList/ADT_linkedlist.c"
+//#include "./src/Poin/ADT_poin.c"
+
 
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
@@ -89,9 +92,9 @@ void printPeta() {
     int i,j;
 
     i = 0;
-    for (i; i < Ukuran_Peta; i++) {
+    for (i; i < DataPemain.KuadranPeta->NBrsEff; i++) {
         j = 0;
-        for (j; j < Ukuran_Peta; j++) {
+        for (j; j < DataPemain.KuadranPeta->NKolEff; j++) {
             printf("%c", DataPemain.KuadranPeta->Isi[i][j]);
         }
         printf("\n");
@@ -135,6 +138,11 @@ int main() {
     bacaPeta("kuadran3.txt",&petaKuadran3);
     bacaPeta("kuadran4.txt",&petaKuadran4);
 
+    Identitas_Peta.Map_X_Min = 1;
+    Identitas_Peta.Map_Y_Min = 1;
+    Identitas_Peta.Map_X_Max = petaKuadran1.NKolEff - 2;
+    Identitas_Peta.Map_Y_Max = petaKuadran1.NBrsEff - 2;
+
     ///// ///// ///// ///// /////
 
     adrGrafNode Pn = GrafAlokNode(&petaKuadran1);
@@ -146,7 +154,6 @@ int main() {
     GrafInsertNode(GrafPeta, &petaKuadran4);
 
     GrafInsertEdge(GrafPeta, &petaKuadran1, &petaKuadran2, 'a');
-
     GrafInsertEdge(GrafPeta, &petaKuadran1, &petaKuadran4, 's');
 
     GrafInsertEdge(GrafPeta, &petaKuadran2, &petaKuadran1, 'd');
@@ -396,7 +403,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.W == '^') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.Y = Map_Y_Max;
+                DataPemain.PosisiPemain.Y = Identitas_Peta.Map_Y_Max;
                 pindahPeta(Perintah, DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -443,7 +450,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.A == '<') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.X = Map_X_Max;
+                DataPemain.PosisiPemain.X = Identitas_Peta.Map_X_Max;
                 pindahPeta(Perintah,DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -490,7 +497,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.S == 'V') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.Y = Map_X_Min;
+                DataPemain.PosisiPemain.Y = Identitas_Peta.Map_X_Min;
                 pindahPeta(Perintah,DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
@@ -537,7 +544,7 @@ int main() {
                 tambahWaktuMainManual(0,1);
             } else if (SekitaranPemain.D == '>') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.X = Map_X_Min;
+                DataPemain.PosisiPemain.X = Identitas_Peta.Map_X_Min;
                 pindahPeta(Perintah,DataPemain.KuadranPeta);
                 DataPemain.SimbolPetak = '-';
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
