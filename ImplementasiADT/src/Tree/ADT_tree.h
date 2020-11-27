@@ -66,12 +66,12 @@ addressNode SearchWahanaDenganIndeks(Tree T, int idx);
 addressNode Predecessor(addressNode Wahana, Tree T);
 // Mencari wahana yang apabila diupgrade akan menghasilkan Wahana
 
-void TambahUpgrade(int idx, TupelUp NewUp, Tree T);
+void TambahUpgrade(int idx, TupelUp NewUp, Tree *T);
 
 LinkedList KemungkinanUpgrade(Tree T);
 // Membuat list semua kemungkinan upgrade yang mungkin dari sebuah wahana
 
-
+void PrintTree(Tree P, int h);
 
 #endif
 

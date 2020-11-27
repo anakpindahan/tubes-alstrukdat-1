@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <windows.h>
 #include "src/Boolean/boolean.h"
-#include "src/Waktu/ADT_waktu.c"
-#include "src/Kata/ADT_kata.c"
-#include "src/Stack/ADT_stack.c"
-#include "src/Tree/ADT_tree.c"
+#include "src/Waktu/ADT_waktu.h"
+#include "src/Kata/ADT_kata.h"
+#include "src/Stack/ADT_stack.h"
+#include "src/Tree/ADT_tree.h"
 #include "src/Peta/ADT_Peta.c"
 #include "src/GrafPeta/ADT_GrafPeta.c"
-#include "src/LinkedList/ADT_linkedlist.c"
+#include "src/LinkedList/ADT_linkedlist.h"
 
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
@@ -167,18 +167,16 @@ int main() {
     		wahana.HargaTiket = atoi(token);
 
     		token = strtok(NULL, ";");
+    		wahana.HargaBangun.Uang = atoi(token);
 
-			tokenSec = strtok(token, ",");
-    		wahana.HargaBangun.Uang = atoi(tokenSec);
+			token = strtok(NULL, ";");
+			wahana.HargaBangun.BahanBangunan1 = atoi(token);
 
-			tokenSec = strtok(NULL, ",");
-			wahana.HargaBangun.BahanBangunan1 = atoi(tokenSec);
+			token = strtok(NULL, ";");
+			wahana.HargaBangun.BahanBangunan2 = atoi(token);
 
-			tokenSec = strtok(NULL, ",");
-			wahana.HargaBangun.BahanBangunan2 = atoi(tokenSec);
-
-			tokenSec = strtok(NULL, ",");
-			wahana.HargaBangun.BahanBangunan3 = atoi(tokenSec);
+			token = strtok(NULL, ";");
+			wahana.HargaBangun.BahanBangunan3 = atoi(token);
 
     		token = strtok(NULL, ";");
     		wahana.Durasi = atoi(token);
@@ -190,11 +188,7 @@ int main() {
 //			wahana.Deskripsi = createKata(token);
 
     		token = strtok(NULL, ";");
-    		if(token != NULL){
-    			wahana.Upgrade = atoi(token);
-			} else {
-				wahana.Upgrade = 0;
-			}
+			wahana.Upgrade = atoi(token);
 
 			ListWahana[i] = wahana;
 			i++;
@@ -229,7 +223,7 @@ int main() {
     		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
     		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
     		NewUp[5] = 0;
-    		TambahUpgrade(0, NewUp, TreeUpgrade);
+    		TambahUpgrade(0, NewUp, &TreeUpgrade);
 		} else {
     		NewUp[0] = ListWahana[i].Indeks;
     		NewUp[1] = ListWahana[i].HargaBangun.Uang;
@@ -237,17 +231,18 @@ int main() {
     		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
     		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
     		NewUp[5] = ListWahana[i].Upgrade;			
-			TambahUpgrade(ListWahana[i].Upgrade, NewUp, TreeUpgrade);
+			TambahUpgrade(ListWahana[i].Upgrade, NewUp, &TreeUpgrade);
 		}
 	}
     
-    
+    PrintTree(TreeUpgrade, 2);
 
-/*    for(i = 0; i < BanyakWahana; i++){
+
+	for(i = 0; i < BanyakWahana; i++){
     	printf("%d %d ", ListWahana[i].Indeks, ListWahana[i].Tipe);
     	printKata(ListWahana[i].Nama);
-    	printf("%d %d %d %d %d %d %d\n", ListWahana[i].HargaTiket, ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3, ListWahana[i].Durasi, ListWahana[i].Kapasitas);
-	}*/
+    	printf(" %d %d %d %d %d %d %d %d\n", ListWahana[i].HargaTiket, ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3, ListWahana[i].Durasi, ListWahana[i].Kapasitas, ListWahana[i].Upgrade);
+	}
 
     ///// ///// ///// ///// /////
 
@@ -700,7 +695,7 @@ int main() {
         	wahanaSekitar[1] = (SekitaranPemain.W == 'W');
         	wahanaSekitar[2] = (SekitaranPemain.S == 'W');
         	wahanaSekitar[3] = (SekitaranPemain.D == 'W');
-			if((!wahanaSekitar[0]) && (wahanaSekitar[1]) && (wahanaSekitar[2]) && (wahanaSekitar[3])){
+			if(!((wahanaSekitar[0]) && (wahanaSekitar[1]) && (wahanaSekitar[2]) && (wahanaSekitar[3]))){
 				printf("Gak ada apa-apa woy, mau upgrade apa?");
 			} else {
 				int IDupgrade;
@@ -838,51 +833,87 @@ int main() {
 			// Pilih wahana
 		} else if(isKataSama(kata_execute, Perintah)){
 			Tupel X;
-			while(!StackKosong(DaftarPerintah)){
-				Pop(&DaftarPerintah, &X);
-				Push(&DaftarPerintahExec, X);
-			}
-			while(!StackKosong(DaftarPerintahExec)){
-				Pop(&DaftarPerintahExec, &X);
-				switch(X[0]){
-					case 1: // Build
-						i = X[1];
-						WahanaDibangun NewWahana;
-						Inventaris.Uang += X[2];
-						Inventaris.BahanBangunan1 += X[3];
-						Inventaris.BahanBangunan2 += X[4];
-						Inventaris.BahanBangunan3 += X[5];
-					//	DataPemain.SimbolPetak = 'W';
-						NewWahana.Indeks = X[1];
-						NewWahana.Posisi.X = X[7];
-						NewWahana.Posisi.Y = X[8];
-						NewWahana.Kerusakan = 0;
-						DataPemain.KuadranPeta->Isi[NewWahana.Posisi.X][NewWahana.Posisi.Y] = 'W';
-						// GANTI SIMBOL DI PETA MENJADI W
-						ListWahanaDibangun[BanyakWahanaDibangun] = NewWahana;
-						BanyakWahanaDibangun++;
-						tambahWaktuMainManual(1, 0);
-						printf("Selamat, wahana telah dibangun\n");
-						break;
-					case 2:
-							// Upgrade
-						break;
-					case 3: // Buy
-						Inventaris.BahanBangunan1 += X[3];
-						Inventaris.BahanBangunan2 += X[4];
-						Inventaris.BahanBangunan3 += X[5];
-						Inventaris.Uang += X[2];
-						tambahWaktuMainManual(0, 20);
-						printf("Selamat, Anda telah berhasil membeli barang\n");
-						break;
-						
+			
+			if(StackKosong(DaftarPerintah)){
+				printf("Tidak ada perintah untuk dieksekusi\n");
+			} else {
+				// Copy Stack Perintah Agar Bisa Dijalankan dari paling Awal
+				while(!StackKosong(DaftarPerintah)){
+					Pop(&DaftarPerintah, &X);
+					Push(&DaftarPerintahExec, X);
 				}
-				HutangUang = 0;
-				HutangBB1 = 0;
-				HutangBB2 = 0;
-				HutangBB3 = 0;
-				setWaktu(&durasiExecute, 0, 0);
+				
+				// Eksekusi satu persatu
+				while(!StackKosong(DaftarPerintahExec)){
+					Pop(&DaftarPerintahExec, &X);
+					switch(X[0]){
+						case 1: // Build
+							
+							Inventaris.Uang += X[2];
+							Inventaris.BahanBangunan1 += X[3];
+							Inventaris.BahanBangunan2 += X[4];
+							Inventaris.BahanBangunan3 += X[5];
+							
+							// Tambah Wahana di List WahanaDibangun
+							WahanaDibangun NewWahana;
+							
+							NewWahana.Indeks = X[1];
+							NewWahana.Posisi.X = X[7];
+							NewWahana.Posisi.Y = X[8];
+							NewWahana.Kerusakan = 0;
+							
+							// MASIH BELUM PAS
+							DataPemain.KuadranPeta->Isi[NewWahana.Posisi.X][NewWahana.Posisi.Y] = 'W';
+							/////////////////
+							
+							ListWahanaDibangun[BanyakWahanaDibangun] = NewWahana;
+							BanyakWahanaDibangun++;
+							
+							// Eksekusi Waktu
+							tambahWaktuMainManual(1, 0);
+							
+							printf("Selamat, wahana baru telah dibangun\n");
+							break;
+						case 2:
+								// Upgrade
+							break;
+						case 3: // Buy
+							Inventaris.BahanBangunan1 += X[3];
+							Inventaris.BahanBangunan2 += X[4];
+							Inventaris.BahanBangunan3 += X[5];
+							Inventaris.Uang += X[2];
+							
+							// Eksekusi Waktu
+							tambahWaktuMainManual(0, 20);
+							printf("Selamat, Anda telah berhasil membeli barang\n");
+							break;
+	
+							
+					}
+					
+					// Reset penghitungan waktu dan resource yang dibutuhkan
+					HutangUang = 0;
+					HutangBB1 = 0;
+					HutangBB2 = 0;
+					HutangBB3 = 0;
+					setWaktu(&durasiExecute, 0, 0);
+					
+					// Skip langsung ke MainPhase
+		            setWaktu(&WaktuMain,9,0);
+		            GameStage.Phase = 1;
+		
+		            system("cls");
+		            printStage();
+		            printPeta();
+		            printInventaris();
+		            printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
+		            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
+		            selisih = selisihTerhadapWaktuMain(waktuTutup);
+		            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
+					
+				}
 			}
+
 		} else if(isKataSama(kata_undo, Perintah) && !diMainPhase(WaktuMain)){
 			Tupel X;
 			if(StackKosong(DaftarPerintah)){

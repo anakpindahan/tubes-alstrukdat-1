@@ -1,6 +1,7 @@
 /*IMPLEMENTASI ADT TREE*/
 
 #include "../Boolean/boolean.h"
+#include "../LinkedList/ADT_linkedlist.h"
 #include "ADT_tree.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -117,7 +118,7 @@ addressNode Predecessor(addressNode Wahana, Tree T)
 	return(SearchWahanaDenganIndeks(T, InfoWahana(Wahana)[5]));
 }
 
-void TambahUpgrade(int idx, TupelUp NewUp, Tree T)
+void TambahUpgrade(int idx, TupelUp NewUp, Tree *T)
 // I.S. T terdefinisi dan memuat sebuah wahana yang memiliki indeks idx
 // F.S. Terbentuk daun baru yang merupakan left dari wahana berindeks idx jika wahana ini belum memiliki upgrade
 // dan menjadi right child dari wahana terakhir hasil upgrade wahana berindeks idx
@@ -128,27 +129,27 @@ void TambahUpgrade(int idx, TupelUp NewUp, Tree T)
 	/*ALGORITMA*/
 	Node = AlokasiAddressTree(NewUp);
 	if(Node != Nil){
-		if(IDWahana(T) == idx){
-			if(TreeSatuElemen(T)){
-				Left(T) = Node;
-			} else if(UnerLeft(T)){
-				Right(Left(T)) = Node;
+		if(IDWahana(*T) == idx){
+			if(TreeSatuElemen(*T)){
+				Left(*T) = Node;
+			} else if(UnerLeft(*T)){
+				Right(Left(*T)) = Node;
 			} else {
-				tempWahana = Left(T);
+				tempWahana = Left(*T);
 				while(Right(tempWahana) != Nil){
 					tempWahana = Right(tempWahana);
 				}
 				Right(tempWahana) = Node;
 			}
 		} else {
-			if(SearchEksistensiIndeks(Left(T), idx)){
-				TambahUpgrade(idx, NewUp, Left(T));
+			if(SearchEksistensiIndeks(Left(*T), idx)){
+				TambahUpgrade(idx, NewUp, &Left(*T));
 			} else {
-				TambahUpgrade(idx, NewUp, Right(T));
+				TambahUpgrade(idx, NewUp, &Right(*T));
 			}
 		}
 	}
-	
+}
 	
 	
 LinkedList KemungkinanUpgrade(Tree T)
@@ -169,4 +170,44 @@ LinkedList KemungkinanUpgrade(Tree T)
 		return(LL);
 	}
 }	
+
+void PrintTree(Tree P, int h) 
+/* I.S. P terdefinisi, h adalah jarak indentasi (spasi) */
+/* F.S. Semua simpul P sudah ditulis dengan indentasi (spasi) */
+/* Penulisan akar selalu pada baris baru (diakhiri newline) */
+/* Contoh, jika h = 2: 
+1) Pohon preorder: (A()()) akan ditulis sbb:
+A
+2) Pohon preorder: (A(B()())(C()())) akan ditulis sbb:
+A
+  B
+  C
+3) Pohon preorder: (A(B(D()())())(C()(E()()))) akan ditulis sbb:
+A
+  B
+    D
+  C
+    E
+*/
+{
+	/*KAMUS*/
+	int i, hc = h;
+	/*ALGORITMA*/
+	if(TreeKosong(P)){
+		
+	} else {
+		printf("%d\n", IDWahana(P));
+		if(!TreeKosong(Left(P))){
+			for(i = 0; i < h; i++){
+				printf(" ");
+			}
+			PrintTree(Left(P), hc+h);
+		}
+		if(!TreeKosong(Right(P))){
+			for(i = 0; i < h; i++){
+				printf(" ");
+			}
+			PrintTree(Right(P), hc+h);			
+		}
+	}
 }
