@@ -116,35 +116,56 @@ char dummyChar; // --> Kontainer untuk scanf '\n'
 
 int main() {
 
-    printf(" _     _  ___  ___      ___     __   __   _     _  _______  __    _  _______  ___   _  __   __  __  _______ \n");
-    printf("| | _ | ||   ||   |    |   |   |  | |  | | | _ | ||   _   ||  |  | ||       ||   | | ||  | |  ||  ||       |\n");
-    printf("| || || ||   ||   |    |   |   |  |_|  | | || || ||  |_|  ||   |_| ||    ___||   |_| ||  |_|  ||__||  _____|\n");
-    printf("|       ||   ||   |    |   |   |       | |       ||       ||       ||   | __ |      _||       |    | |_____ \n");
-    printf("|       ||   ||   |___ |   |___|_     _| |       ||       ||  _    ||   ||  ||     |_ |_     _|    |_____  |\n");
-    printf("|   _   ||   ||       ||       | |   |   |   _   ||   _   || | |   ||   |_| ||    _  |  |   |       _____| |\n");
-    printf("|__| |__||___||_______||_______| |___|   |__| |__||__| |__||_|  |__||_______||___| |_|  |___|      |_______|\n");
-    printf(" _     _  _______  ______    __   __  ______   _______                                                      \n");
-    printf("| | _ | ||   _   ||    _ |  |  | |  ||      | |       |                                                     \n");
-    printf("| || || ||  |_|  ||   | ||  |  | |  ||  _    ||   _   |                                                     \n");
-    printf("|       ||       ||   |_||_ |  |_|  || | |   ||  | |  |                                                     \n");
-    printf("|       ||       ||    __  ||       || |_|   ||  |_|  |                                                     \n");
-    printf("|   _   ||   _   ||   |  | ||       ||       ||       |                                                     \n");
-    printf("|__| |__||__| |__||___|  |_||_______||______| |_______|                                                     \n");
-    printf("\nMain Menu\n1. New Game\n2. Exit\n");
+    printf("                                       ##   ##                                              \n");
+    printf("                                       ##   ##  ##      ##                                  \n");
+    printf(" ########               ########  ##   ##   ##   ##    ##                                   \n");
+    printf("   #####                 #####         ##   ##    ##  ##                                    \n");
+    printf("     ###                 ###      ##   ##   ##     ####                                     \n");
+    printf("      ###       #       ###       ##   ##   ##      ##                                      \n");
+    printf("      ###      ###      ###       ##   ###  ###    ##         ##                    ###                 \n");
+    printf("       ###    #####    ###                        ##          ##                    ###                 \n");
+    printf("       ###   ### ###   ###     #####    ## ####  ##  ######   ##  ##   ##       ##    #   #####         \n");
+    printf("        ### ###   ### ###          ##   ###   ##    ##   ##   #####     ##     ##    #   ##             \n");
+    printf("        #####      #####       ######   ##    ##   ##    ##   #####      ##   ##          ####          \n");
+    printf("         ###        ###       ##   ##   ##    ##    ##   ##   ##  ##       ####              ##         \n");
+    printf("          #          #         ######   ##    ##     ######   ##   ##       ##           #####          \n");
+    printf("                                                         ##                ##                           \n");
+    printf("                                                    ##  ##                ##                            \n");
+    printf("                                                     ####                ##                             \n");
+    printf("                                                                                                                \n");
+    printf("   # # #                   # # #    # # # # # #     # # # # # #      # # #         # # # # #        # # # #     \n");
+    printf("   #    #                 #    #   #           #    #          #     #   #         #        #       #     #     \n");
+    printf("    #    #       #       #    #   #    # # #    #   #   # # #   #    #   #         #   # #   #      #     #     \n");
+    printf("     #    #     # #     #    #    #    #   #    #   #   #    #   #   #   #         #   #  #   #     #     #     \n");
+    printf("      #    #   #   #   #    #     #    #   #    #   #   # # #   #    #   #         #   #   #   #    #     #     \n");
+    printf("       #    # #     # #    #      #    #   #    #   #          #     #   #         #   #   #   #     #   #      \n");
+    printf("        #    #   #   #    #       #    #   #    #   #   #     #      #   #         #   #  #   #       # #       \n");
+    printf("         #      # #      #        #    # # #    #   #   # #    #     #   # # # #   #   # #   #                  \n");
+    printf("          #    #   #    #          #           #    #   #  #    #    #         #   #        #         # #       \n");
+    printf("           #  #     #  #            # # # # # #     # # #   # #  #   # # # # # #   # # # # #          # #       \n");
+    printf("\n");
+    printf("MAIN MENU:     \n");
+    printf("  1. NEW GAME   \n");
+    printf("  2. QUIT GAME  \n\n");
 
-    int pilihan_Menu_Utama;
+    int opsiMenu;
+
     do {
-        printf("\nInput angka: ");
-        scanf("%d", &pilihan_Menu_Utama);
-        scanf("%c", &dummyChar);
-        if (pilihan_Menu_Utama > 2 || pilihan_Menu_Utama < 1) {
-            printf("\nInput tidak valid");
-        }
-    } while (pilihan_Menu_Utama > 2 || pilihan_Menu_Utama < 1);
+    printf("Input angka: ");
+    scanf("%d", &opsiMenu);
+    scanf("%c", &dummyChar);
+    // Input menu tidak valid
+    if (opsiMenu < 1 || opsiMenu > 2) {
+        printf("Opsi tidak valid. Silakan ulangi!\n\n");
+    }
+    } while (opsiMenu < 1 || opsiMenu > 2);
 
-    if (pilihan_Menu_Utama == 2) {
+    if (opsiMenu == 2) {
         return 0;
-    } else if (pilihan_Menu_Utama == 1) {
+    } else if (opsiMenu == 1) {
+    system("cls");
+    printf("Membuka dunia baru...");
+    sleep(1);
     system("cls");
 
     Peta petaKuadran1, petaKuadran2, petaKuadran3, petaKuadran4;
