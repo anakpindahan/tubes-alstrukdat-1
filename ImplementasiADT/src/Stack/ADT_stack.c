@@ -29,7 +29,7 @@ void Push(Stack *S, Tupel X)
 {
 	int i;
 	Top(*S)++;
-	for(i = 0; i < 9; i++){
+	for(i = 0; i < 10; i++){
 		InfoTop(*S)[i] = X[i];
 	}
 	
@@ -38,7 +38,7 @@ void Push(Stack *S, Tupel X)
 void Pop(Stack *S, Tupel *X)
 {
 	int i;
-	for(i = 0; i < 9; i++){
+	for(i = 0; i < 10; i++){
 		(*X)[i] = InfoTop(*S)[i];
 	}
 	Top(*S)--;

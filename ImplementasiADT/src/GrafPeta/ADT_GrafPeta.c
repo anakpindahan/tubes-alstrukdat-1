@@ -4,6 +4,7 @@
 // _ADT_GRAFPETA_H
 
 #include <stdlib.h>
+#include "ADT_GrafPeta.h"
 //#include <stdio.h>
 //#define NULL NULL
 /*
@@ -19,27 +20,6 @@ typedef struct {
 
 GrafPeta GrafUntukPeta;
 */
-
-typedef struct tGrafNode * adrGrafNode;
-typedef struct tGrafSuccNode * adrGrafSuccNode;
-
-typedef struct tGrafNode {
-	Peta* ID;
-	adrGrafSuccNode Trail;
-	adrGrafNode Next;
-} GrafNode;
-
-typedef struct tGrafSuccNode {
-	adrGrafNode Succ;
-	char arah;
-	adrGrafSuccNode Next;
-} GrafSuccNode;
-
-typedef struct {
-	adrGrafNode First;
-} Graph;
-
-Graph GrafPeta;
 
 adrGrafNode GrafAlokNode (Peta* peta) {
     adrGrafNode Pn = (adrGrafNode) malloc (sizeof(GrafNode));

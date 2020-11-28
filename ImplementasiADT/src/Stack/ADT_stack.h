@@ -5,7 +5,7 @@
 
 #include "../Boolean/boolean.h"
 
-typedef int Tupel[9];
+typedef int Tupel[10];
 //Tupel berisi [comm, w, u, b1, b2, b3, up, X, Y]
 // comm: perintah yang akan dikerjakan, 1: build, 2: upgrade, 3: buy
 // w: id wahana yang dibangun, jika tidak ada, 0

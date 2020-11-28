@@ -89,10 +89,8 @@ boolean SearchEksistensiIndeks(Tree T, int idx)
 	/*ALGORITMA*/
 	if(TreeKosong(T)){
 		return(false);
-	} else if(TreeSatuElemen(T)) {
-		return(IDWahana(T) == idx);
 	} else {
-		return(SearchEksistensiIndeks(Left(T), idx) || SearchEksistensiIndeks(Right(T), idx));
+		return(SearchEksistensiIndeks(Left(T), idx) || SearchEksistensiIndeks(Right(T), idx) || (IDWahana(T) == idx));
 	}	
 }
 addressNode SearchWahanaDenganIndeks(Tree T, int idx)
@@ -125,28 +123,17 @@ void TambahUpgrade(int idx, TupelUp NewUp, Tree *T)
 {
 	/*KAMUS*/
 	addressNode Node;
-	Tree tempWahana;
 	/*ALGORITMA*/
-	Node = AlokasiAddressTree(NewUp);
-	if(Node != Nil){
-		if(IDWahana(*T) == idx){
-			if(TreeSatuElemen(*T)){
-				Left(*T) = Node;
-			} else if(UnerLeft(*T)){
-				Right(Left(*T)) = Node;
-			} else {
-				tempWahana = Left(*T);
-				while(Right(tempWahana) != Nil){
-					tempWahana = Right(tempWahana);
-				}
-				Right(tempWahana) = Node;
-			}
+	
+	if(IDWahana(*T) == idx){
+		Node = AlokasiAddressTree(NewUp);
+		Right(Node) = Left(*T);
+		Left(*T) = Node;
+	} else {
+		if(SearchEksistensiIndeks(Left(*T), idx)){
+			TambahUpgrade(idx, NewUp, &Left(*T));
 		} else {
-			if(SearchEksistensiIndeks(Left(*T), idx)){
-				TambahUpgrade(idx, NewUp, &Left(*T));
-			} else {
-				TambahUpgrade(idx, NewUp, &Right(*T));
-			}
+			TambahUpgrade(idx, NewUp, &Right(*T));
 		}
 	}
 }

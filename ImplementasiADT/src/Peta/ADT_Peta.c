@@ -4,21 +4,9 @@
 #define Map_Y_Min 1
 #define Ukuran_Peta 11
 */
-
-typedef struct {
-	char Isi[50][50];
-	int NKolEff;
-	int NBrsEff;
-} Peta;
-
-typedef struct {
-    int Map_X_Max;
-    int Map_X_Min;
-    int Map_Y_Max;
-    int Map_Y_Min;
-} IDPetaUmum;
-
-IDPetaUmum Identitas_Peta;
+#include "ADT_Peta.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
 void bacaPeta(char* file_name, Peta* kontainer_peta) {
