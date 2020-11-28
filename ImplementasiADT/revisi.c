@@ -11,6 +11,9 @@
 #include "./src/LinkedList/ADT_linkedlist.h"
 #include "./src/Poin/ADT_poin.h"
 
+char dummyChar; // --> Kontainer untuk scanf '\n'
+char nama_pemain[50]; // --> Kontainer untuk nama pemain
+
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
     int Day;
@@ -98,6 +101,13 @@ void printPeta() {
         }
         printf("\n");
     }
+    printf("\nLegend:\n");
+    printf("A : Antrian\n");
+    printf("P : Pemain\n");
+    printf("W : Wahana\n");
+    printf("O : Office\n");
+    printf("^, <, V, > : Gerbang\n\n");
+    printf("Nama: %s\n", nama_pemain);
 }
 
 void pindahPeta(Kata kata, Peta* currentPetaKuadran) {
@@ -112,7 +122,7 @@ void printInventaris() {
     printf("Polymerization Preparation: %d\n\n", Inventaris.BahanBangunan3);
 }
 
-char dummyChar; // --> Kontainer untuk scanf '\n'
+
 
 int main() {
 
@@ -163,6 +173,9 @@ int main() {
     if (opsiMenu == 2) {
         return 0;
     } else if (opsiMenu == 1) {
+    printf("Nama pemain: ");
+    scanf("%s", nama_pemain);
+    scanf("%c", &dummyChar);
     system("cls");
     printf("Membuka dunia baru...");
     sleep(1);
