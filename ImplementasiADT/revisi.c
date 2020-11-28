@@ -9,8 +9,7 @@
 #include "./src/Peta/ADT_Peta.h"
 #include "./src/GrafPeta/ADT_GrafPeta.h"
 #include "./src/LinkedList/ADT_linkedlist.h"
-//#include "./src/Poin/ADT_poin.c"
-
+#include "./src/Poin/ADT_poin.h"
 
 typedef struct {
     int Phase; //PHASE 0 = PREPARATION, PHASE 1 = MAIN
@@ -26,11 +25,6 @@ void printStage() {
         printf("Pembukaan Wahana Hari ke-%d\n\n", GameStage.Day);
     }
 }
-
-typedef struct {
-    int X;
-    int Y;
-} Poin;
 
 typedef struct {
     Poin PosisiPemain;
@@ -107,17 +101,6 @@ void printPeta() {
 }
 
 void pindahPeta(Kata kata, Peta* currentPetaKuadran) {
-    /*
-    boolean ditemukan = false;
-    int i = 0;
-
-    while (!ditemukan) {
-        if (GrafUntukPeta.Edge[i].AsalKuadranPeta == currentPetaKuadran && GrafUntukPeta.Edge[i].InputArah == kata.TabKata[0]) {
-            ditemukan = true;
-            DataPemain.KuadranPeta = GrafUntukPeta.Edge[i].TargetKuadranPeta;
-        }
-        i++;
-    }*/
     DataPemain.KuadranPeta = GrafSearchTarget(GrafPeta,DataPemain.KuadranPeta,kata.TabKata[0]);
 }
 
@@ -249,9 +232,9 @@ int main() {
     DummyUpgrade[3] = 0;
     DummyUpgrade[4] = 0;
     DummyUpgrade[5] = 0;
-    
+
     TreeUpgrade = BuatTreeF(DummyUpgrade, Nil, Nil);
-    
+
     for(i = 0; i < BanyakWahana; i++){
     	if(ListWahana[i].Tipe == 1){
     		NewUp[0] = ListWahana[i].Indeks;
@@ -267,11 +250,11 @@ int main() {
     		NewUp[2] = ListWahana[i].HargaBangun.BahanBangunan1;
     		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
     		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
-    		NewUp[5] = ListWahana[i].Upgrade;			
+    		NewUp[5] = ListWahana[i].Upgrade;
 			TambahUpgrade(ListWahana[i].Upgrade, NewUp, &TreeUpgrade);
 		}
 	}
-	
+
 //	PrintTree(TreeUpgrade, 2);
 
     ///// ///// ///// ///// /////
@@ -283,64 +266,6 @@ int main() {
     DataPemain.SimbolPetak = '-';
     DataPemain.Kuadran = 2;
 
-    ///// ///// ///// ///// /////
-/*
-    Garis GarisHubung1;
-        GarisHubung1.AsalKuadranPeta = &petaKuadran1;
-        GarisHubung1.InputArah = 'a';
-        GarisHubung1.TargetKuadranPeta = &petaKuadran2;
-
-    GrafUntukPeta.Edge[0] = GarisHubung1;
-
-        Garis GarisHubung2;
-        GarisHubung2.AsalKuadranPeta = &petaKuadran1;
-        GarisHubung2.InputArah = 's';
-        GarisHubung2.TargetKuadranPeta= &petaKuadran4;
-
-    GrafUntukPeta.Edge[1] = GarisHubung2;
-
-        Garis GarisHubung3;
-        GarisHubung3.AsalKuadranPeta = &petaKuadran2;
-        GarisHubung3.InputArah = 'd';
-        GarisHubung3.TargetKuadranPeta = &petaKuadran1;
-
-    GrafUntukPeta.Edge[2] = GarisHubung3;
-
-        Garis GarisHubung4;
-        GarisHubung4.AsalKuadranPeta = &petaKuadran2;
-        GarisHubung4.InputArah = 's';
-        GarisHubung4.TargetKuadranPeta = &petaKuadran3;
-
-    GrafUntukPeta.Edge[3] = GarisHubung4;
-
-        Garis GarisHubung5;
-        GarisHubung5.AsalKuadranPeta = &petaKuadran3;
-        GarisHubung5.InputArah = 'w';
-        GarisHubung5.TargetKuadranPeta = &petaKuadran2;
-
-    GrafUntukPeta.Edge[4] = GarisHubung5;
-
-        Garis GarisHubung6;
-        GarisHubung6.AsalKuadranPeta = &petaKuadran3;
-        GarisHubung6.InputArah = 'd';
-        GarisHubung6.TargetKuadranPeta = &petaKuadran4;
-
-    GrafUntukPeta.Edge[5] = GarisHubung6;
-
-        Garis GarisHubung7;
-        GarisHubung7.AsalKuadranPeta= &petaKuadran4;
-        GarisHubung7.InputArah = 'w';
-        GarisHubung7.TargetKuadranPeta = &petaKuadran1;
-
-    GrafUntukPeta.Edge[6] = GarisHubung7;
-
-        Garis GarisHubung8;
-        GarisHubung8.AsalKuadranPeta = &petaKuadran4;
-        GarisHubung8.InputArah = 'a';
-        GarisHubung8.TargetKuadranPeta = &petaKuadran3;
-
-    GrafUntukPeta.Edge[7] = GarisHubung8;
-*/
     ///// ///// ///// ///// /////
 
     Inventaris.BahanBangunan1 = 1000;
@@ -718,28 +643,14 @@ int main() {
 							HutangBB2 -= tupelBuild[4];
 							HutangBB3 -= tupelBuild[5];
 		                	Push(&DaftarPerintah, tupelBuild);
-							printf("Perintah untuk membangun sudah dimasukkan ke stack perintah\n");
+							printf("Perintah untuk membangun sudah dimasukkan ke stack perintah. Pemain diharapkan segera bergerak dari area pembangunan. Terima kasih.\n");
 		                	tambahWaktuManualP(durasiExecute, 1, 0);
 						}
 					}
 					i++;
 				}
             }
-        } /*else if (perintah == 'u') {
-            printf("Menu Pembelian:\n");
-            printf("\t1. D32 Steel: 5 LMD\n");
-            printf("\t2. Bipolar Nanoflake: 7 LMD\n");
-            printf("\t3. Polymerization Preparation: 8 LMD\n");
-            printf("\n");
-
-            char Tipe;
-            int Jumlah;
-
-            scanf(" %c\n", &Tipe);
-            if (Tipe == '1' || Tipe == '2' || Tipe == '3') {
-                scanf("%d\n", &Jumlah);
-            }
-        }*/ else if(isKataSama(kata_upgrade, Perintah)){
+        } else if(isKataSama(kata_upgrade, Perintah)){
         	boolean wahanaSekitar[4];
         	wahanaSekitar[0] = (SekitaranPemain.A == 'W');
         	wahanaSekitar[1] = (SekitaranPemain.W == 'W');
@@ -892,34 +803,34 @@ int main() {
 					Pop(&DaftarPerintah, &X);
 					Push(&DaftarPerintahExec, X);
 				}
-				
+
 				// Eksekusi satu persatu
 				while(!StackKosong(DaftarPerintahExec)){
 					Pop(&DaftarPerintahExec, &X);
 					switch(X[0]){
 						case 1: // Build
-							
+
 							Inventaris.Uang += X[2];
 							Inventaris.BahanBangunan1 += X[3];
 							Inventaris.BahanBangunan2 += X[4];
 							Inventaris.BahanBangunan3 += X[5];
-							
+
 							// Tambah Wahana di List WahanaDibangun
 							WahanaDibangun NewWahana;
-							
+
 							NewWahana.Indeks = X[1];
 							NewWahana.Posisi.X = X[7];
 							NewWahana.Posisi.Y = X[8];
 							NewWahana.Kuadran = X[9];
 							NewWahana.Kerusakan = 0;
-							
+
 							// MASIH BELUM PAS
 							switch(X[9]){
 								case 1:
 									petaKuadran1.Isi[X[7]][X[8]] = 'W';
 									break;
 								case 2:
-									petaKuadran2.Isi[X[7]][X[8]] = 'W';									
+									petaKuadran2.Isi[X[7]][X[8]] = 'W';
 									break;
 								case 3:
 									petaKuadran3.Isi[X[7]][X[8]] = 'W';
@@ -931,16 +842,16 @@ int main() {
 							if(DataPemain.Kuadran == X[9] && DataPemain.PosisiPemain.Y == X[7] && DataPemain.PosisiPemain.X == X[8]){
 								DataPemain.SimbolPetak = 'W';
 							}
-														
+
 							/////////////////
-							
+
 							ListWahanaDibangun[BanyakWahanaDibangun] = NewWahana;
 							BanyakWahanaDibangun++;
-							
+
 							// Eksekusi Waktu
 							tambahWaktuMainManual(1, 0);
-							
-							printf("Selamat, wahana baru telah dibangun\n");
+
+							//printf("Selamat, wahana baru telah dibangun\n");
 							break;
 						case 2:
 								// Upgrade
@@ -950,26 +861,26 @@ int main() {
 							Inventaris.BahanBangunan2 += X[4];
 							Inventaris.BahanBangunan3 += X[5];
 							Inventaris.Uang += X[2];
-							
+
 							// Eksekusi Waktu
 							tambahWaktuMainManual(0, 20);
-							printf("Selamat, Anda telah berhasil membeli barang\n");
+							//printf("Selamat, Anda telah berhasil membeli barang\n");
 							break;
-	
-							
+
+
 					}
-					
+
 					// Reset penghitungan waktu dan resource yang dibutuhkan
 					HutangUang = 0;
 					HutangBB1 = 0;
 					HutangBB2 = 0;
 					HutangBB3 = 0;
 					setWaktu(&durasiExecute, 0, 0);
-					
+
 					// Skip langsung ke MainPhase
 		            setWaktu(&WaktuMain,9,0);
 		            GameStage.Phase = 1;
-		
+
 		            system("cls");
 		            printStage();
 		            printPeta();
@@ -978,7 +889,7 @@ int main() {
 		            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
 		            selisih = selisihTerhadapWaktuMain(waktuTutup);
 		            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
-					
+
 				}
 			}
 		} else if(isKataSama(kata_undo, Perintah)){
