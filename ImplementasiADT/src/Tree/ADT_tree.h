@@ -52,9 +52,9 @@ void BuatTreeP(TupelUp wahana, Tree Anak, Tree Saudara, Tree* T);
 Tree BuatTreeF(TupelUp wahana, Tree Anak, Tree Saudara);
 
 /**********MANAJEMEN MEMORI***********/
-addressNode AlokasiAddress(TupelUp wahana);
+addressNode AlokasiAddressTree(TupelUp wahana);
 
-void DealokasiAddress(addressNode P);
+void DealokasiAddressTree(addressNode P);
 
 /************TRAVERSAL************/
 boolean SearchEksistensiIndeks(Tree T, int idx);

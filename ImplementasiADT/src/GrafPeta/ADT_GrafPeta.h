@@ -1,6 +1,7 @@
 #ifndef _ADT_GRAFPETA_H
 #define _ADT_GRAFPETA_H
 
+#include "../Peta/ADT_Peta.h"
 #include <stdlib.h>
 #include <stdio.h>
 

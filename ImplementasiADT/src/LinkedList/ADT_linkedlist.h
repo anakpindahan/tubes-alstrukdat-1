@@ -41,4 +41,6 @@ void DealokasiLL(addressLL *P);
 /*********OPERASI PENAMBAHAN***********/
 void InsVLast(LinkedList *LL, int idx);
 
+void PrintLL(LinkedList LL);
+
 #endif

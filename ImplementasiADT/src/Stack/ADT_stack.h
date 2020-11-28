@@ -6,7 +6,7 @@
 #include "../Boolean/boolean.h"
 
 typedef int Tupel[10];
-//Tupel berisi [comm, w, u, b1, b2, b3, up, X, Y]
+//Tupel berisi [comm, w, u, b1, b2, b3, up, X, Y, K]
 // comm: perintah yang akan dikerjakan, 1: build, 2: upgrade, 3: buy
 // w: id wahana yang dibangun, jika tidak ada, 0
 // u: uang yang dihabiskan, jika tidak ada, 0
@@ -16,6 +16,7 @@ typedef int Tupel[10];
 // up: id wahana hasil upgrade, jika tidak ada, 0
 // X: posisi X build, jika tidak ada, -999
 // Y: posisi Y build, jika tidak ada, -999
+// K: Kuadran tempat wahan dibangun, jika tidak ada, 0
 
 typedef struct {
 	Tupel T[25];

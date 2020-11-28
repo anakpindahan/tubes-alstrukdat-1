@@ -66,7 +66,7 @@ typedef struct{
 	int Kuadran;
 	int Kerusakan;
 	Kata Nama;
-	Inventory HargaBangun;
+	LinkedList Upgrade;
 } WahanaDibangun;
 
 WahanaDibangun ListWahanaDibangun[25];
@@ -236,26 +236,14 @@ int main() {
     TreeUpgrade = BuatTreeF(DummyUpgrade, Nil, Nil);
 
     for(i = 0; i < BanyakWahana; i++){
-    	if(ListWahana[i].Tipe == 1){
-    		NewUp[0] = ListWahana[i].Indeks;
-    		NewUp[1] = ListWahana[i].HargaBangun.Uang;
-    		NewUp[2] = ListWahana[i].HargaBangun.BahanBangunan1;
-    		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
-    		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
-    		NewUp[5] = 0;
-    		TambahUpgrade(0, NewUp, &TreeUpgrade);
-		} else {
-    		NewUp[0] = ListWahana[i].Indeks;
-    		NewUp[1] = ListWahana[i].HargaBangun.Uang;
-    		NewUp[2] = ListWahana[i].HargaBangun.BahanBangunan1;
-    		NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
-    		NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
-    		NewUp[5] = ListWahana[i].Upgrade;
-			TambahUpgrade(ListWahana[i].Upgrade, NewUp, &TreeUpgrade);
-		}
+   		NewUp[0] = ListWahana[i].Indeks;
+    	NewUp[1] = ListWahana[i].HargaBangun.Uang;
+    	NewUp[2] = ListWahana[i].HargaBangun.BahanBangunan1;
+    	NewUp[3] = ListWahana[i].HargaBangun.BahanBangunan2;
+    	NewUp[4] = ListWahana[i].HargaBangun.BahanBangunan3;
+    	NewUp[5] = ListWahana[i].Upgrade;
+		TambahUpgrade(ListWahana[i].Upgrade, NewUp, &TreeUpgrade);
 	}
-
-//	PrintTree(TreeUpgrade, 2);
 
     ///// ///// ///// ///// /////
 
@@ -612,6 +600,9 @@ int main() {
             			printf("Harga yang perlu dibayar adalah %d Lungmen Dollar,", ListWahana[i].HargaBangun.Uang);
 						printf("%d D32 Steel, %d Bipolar Nanoflake,", ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2);
 						printf("dan %d Polymerization Preparation\n", ListWahana[i].HargaBangun.BahanBangunan3);
+						printf("Wahana ini memiliki durasi permainan %d menit, harga tiket wahana adalah %d Lungmen Dollar, dan kapasitas wahana adalah %d orang\n", \
+						ListWahana[i].Durasi, ListWahana[i].HargaTiket, ListWahana[i].Kapasitas);
+
 					}
 				}
 				printf("Masukkan nomor wahana yang ingin dibangun.\n");
@@ -627,7 +618,7 @@ int main() {
                 		if((Inventaris.Uang < ListWahana[i].HargaBangun.Uang + HutangUang) || (Inventaris.BahanBangunan1 < ListWahana[i].HargaBangun.BahanBangunan1 + HutangBB1) || (Inventaris.BahanBangunan2 < ListWahana[i].HargaBangun.BahanBangunan2 + HutangBB2) || (Inventaris.BahanBangunan3 < ListWahana[i].HargaBangun.BahanBangunan3 + HutangBB3)){
                 			printf("Resource Anda tidak mencukupi");
 						} else {
-		                	int tupelBuild[9];
+		                	int tupelBuild[10];
 		                	tupelBuild[0] = 1;
 		                	tupelBuild[1] = ListWahana[i].Indeks;
 		                	tupelBuild[2] = -1*ListWahana[i].HargaBangun.Uang;
@@ -649,6 +640,9 @@ int main() {
 					}
 					i++;
 				}
+				if(!found){
+					printf("Wahana yang Anda pilih bukan merupakan wahana dasar\n");
+				}
             }
         } else if(isKataSama(kata_upgrade, Perintah)){
         	boolean wahanaSekitar[4];
@@ -656,65 +650,54 @@ int main() {
         	wahanaSekitar[1] = (SekitaranPemain.W == 'W');
         	wahanaSekitar[2] = (SekitaranPemain.S == 'W');
         	wahanaSekitar[3] = (SekitaranPemain.D == 'W');
-			if((!wahanaSekitar[0]) && (wahanaSekitar[1]) && (wahanaSekitar[2]) && (wahanaSekitar[3])){
-				printf("Gak ada apa-apa woy, mau upgrade apa?");
+			if(!(wahanaSekitar[0] || wahanaSekitar[1] || wahanaSekitar[2] || wahanaSekitar[3])){
+				printf("Tidak ada wahana yang dapat diupgrade di sekitar sini");
 			} else {
-				int IDupgrade;
+				char input;
 				int i;
+				int idA, idS, idW, idD;
 				Poin PosisiWahana;
 				printf("Pilihlah wahana yang ingin diupgrade\n");
 				for(i = 0; i < 4; i++){
 					if(wahanaSekitar[i]){
 						switch(i){
 							case 0:
-								PosisiWahana.X = DataPemain.PosisiPemain.X ;
-								PosisiWahana.Y = DataPemain.PosisiPemain.Y - 1;
 								for(j = 0; j < BanyakWahanaDibangun; j++){
-									if(ListWahanaDibangun[j].Posisi.X == PosisiWahana.X && ListWahanaDibangun[j].Posisi.Y == PosisiWahana.Y){
-										printf("%d. ", ListWahanaDibangun[j].Indeks);
+									if(ListWahanaDibangun[j].Posisi.X == DataPemain.PosisiPemain.Y && ListWahanaDibangun[j].Posisi.Y == DataPemain.PosisiPemain.X - 1){
+										idA = ListWahanaDibangun[j].Indeks;
+										printf("(A) %d. ", ListWahanaDibangun[j].Indeks);
 										printKata(ListWahanaDibangun[j].Nama);
-										printf("\nHarga yang perlu dibayar adalah %d Lungmen Dollar,", ListWahana[i].HargaBangun.Uang);
-										printf("%d D32 Steel, %d Bipolar Nanoflake,", ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2);
-										printf("dan %d Polymerization Preparation\n", ListWahana[i].HargaBangun.BahanBangunan3);
+										printf("\n");
 									}
 								}
 								break;
 							case 1:
-								PosisiWahana.X = DataPemain.PosisiPemain.X - 1;
-								PosisiWahana.Y = DataPemain.PosisiPemain.Y;
 								for(j = 0; j < BanyakWahanaDibangun; j++){
-									if(ListWahanaDibangun[j].Posisi.X == PosisiWahana.X && ListWahanaDibangun[j].Posisi.Y == PosisiWahana.Y){
-										printf("%d. ", ListWahanaDibangun[j].Indeks);
+									if(ListWahanaDibangun[j].Posisi.X == DataPemain.PosisiPemain.Y - 1 && ListWahanaDibangun[j].Posisi.Y == DataPemain.PosisiPemain.X){
+										idW = ListWahanaDibangun[j].Indeks;
+										printf("(W) %d. ", ListWahanaDibangun[j].Indeks);
 										printKata(ListWahanaDibangun[j].Nama);
-										printf("\nHarga yang perlu dibayar adalah %d Lungmen Dollar,", ListWahana[i].HargaBangun.Uang);
-										printf("%d D32 Steel, %d Bipolar Nanoflake,", ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2);
-										printf("dan %d Polymerization Preparation\n", ListWahana[i].HargaBangun.BahanBangunan3);
+										printf("\n");
 									}
 								}
 								break;
 							case 2:
-								PosisiWahana.X = DataPemain.PosisiPemain.X + 1;
-								PosisiWahana.Y = DataPemain.PosisiPemain.Y;
 								for(j = 0; j < BanyakWahanaDibangun; j++){
-									if(ListWahanaDibangun[j].Posisi.X == PosisiWahana.X && ListWahanaDibangun[j].Posisi.Y == PosisiWahana.Y){
-										printf("%d. ", ListWahanaDibangun[j].Indeks);
+									if(ListWahanaDibangun[j].Posisi.X == DataPemain.PosisiPemain.Y + 1 && ListWahanaDibangun[j].Posisi.Y == DataPemain.PosisiPemain.X){
+										idS = ListWahanaDibangun[j].Indeks;
+										printf("(S) %d. ", ListWahanaDibangun[j].Indeks);
 										printKata(ListWahanaDibangun[j].Nama);
-										printf("\nHarga yang perlu dibayar adalah %d Lungmen Dollar,", ListWahana[i].HargaBangun.Uang);
-										printf("%d D32 Steel, %d Bipolar Nanoflake,", ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2);
-										printf("dan %d Polymerization Preparation\n", ListWahana[i].HargaBangun.BahanBangunan3);
+										printf("\n");
 									}
 								}
 								break;
 							case 3:
-								PosisiWahana.X = DataPemain.PosisiPemain.X;
-								PosisiWahana.Y = DataPemain.PosisiPemain.Y + 1;
 								for(j = 0; j < BanyakWahanaDibangun; j++){
-									if(ListWahanaDibangun[j].Posisi.X == PosisiWahana.X && ListWahanaDibangun[j].Posisi.Y == PosisiWahana.Y){
-										printf("%d. ", ListWahanaDibangun[j].Indeks);
+									if(ListWahanaDibangun[j].Posisi.X == DataPemain.PosisiPemain.Y && ListWahanaDibangun[j].Posisi.Y == DataPemain.PosisiPemain.X + 1){
+										idD = ListWahanaDibangun[j].Indeks;
+										printf("(D) %d. ", ListWahanaDibangun[j].Indeks);
 										printKata(ListWahanaDibangun[j].Nama);
-										printf("\nHarga yang perlu dibayar adalah %d Lungmen Dollar,", ListWahana[i].HargaBangun.Uang);
-										printf("%d D32 Steel, %d Bipolar Nanoflake,", ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2);
-										printf("dan %d Polymerization Preparation\n", ListWahana[i].HargaBangun.BahanBangunan3);
+										printf("\n");
 									}
 								}
 								break;
@@ -723,29 +706,250 @@ int main() {
 
 
 				}
-				// Ngeprint semua wahana di sekitar
-				// Pilih wahana
-				// Ngeprint semua upgrade yang ada
-				scanf("%d", &IDupgrade);
-/*				if(Salah milih upgrade){
-					printf("Gak ada");
-				} else if(Gak cukup resource){
-					printf("Gak ada duit");
-				} else {
-
-                	int tupelUpgrade[7];
-                	tupelUpgrade[0] = 2;
-                	tupelUpgrade[1] = wahana.ID;
-                	tupelUpgrade[2] = Baca
-					tupelUpgrade[3] =   Dari
-					tupelUpgrade[4] =   File
-					tupelUpgrade[5] =   Eksternal
-					tupelUpgrade[6] = IDupgrade;
-					tupelUpgrade[7] = 90;
-                	Push(&DaftarPerintah, tupelUpgrade);
-
-                	tambahWaktu(waktuExecute, 1, 30);
-				}*/
+				int idx;
+				boolean found = false;
+				LinkedList LL;
+				addressNode adN;
+				addressNode adN1;
+				addressLL adLL;
+				scanf("%c", &input);
+				switch(input){
+					case 'A':
+						PosisiWahana.X = DataPemain.PosisiPemain.Y ;
+						PosisiWahana.Y = DataPemain.PosisiPemain.X - 1;
+						adN = SearchWahanaDenganIndeks(TreeUpgrade, idA);
+						LL = KemungkinanUpgrade(adN);
+						adLL = First(LL);
+						while(adLL != Nil){
+							i = 0;
+							found = false;
+							while(!found){
+								if(ListWahana[i].Indeks == InfoIdx(adLL)){
+									found = true;
+									printf("%d. ", ListWahana[i].Indeks);
+									printKata(ListWahana[i].Nama);
+									printf("\nMembangunnya akan membutuhkan %d Lungmen Dollar, %d D32 Steel, %d Bipolar Nanoflake, dan %d Polymerization Preparation\n", \
+									ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3);
+									printf("Membangunnya akan mengubah durasi wahana menjadi %d menit, harga tiket menjadi %d Lungmen Dollar, dan kapasitas menjadi %d orang\n", \
+									ListWahana[i].Durasi, ListWahana[i].HargaTiket, ListWahana[i].Kapasitas);
+								} else {
+									i++;
+								}
+							}
+							adLL = Next(adLL);
+						}
+						scanf("%d", &idx);
+						found = false;
+						DealokasiLL(&adLL);
+						adLL = First(LL);
+						while(!found && adLL != Nil){
+							if(InfoIdx(adLL) == idx){
+								found = true;
+							} else {
+								adLL = Next(adLL);
+							}
+						}
+						if(!found){
+							printf("Anda memasukkan indeks yang salah\n");
+						} else {
+							adN1 = SearchWahanaDenganIndeks(TreeUpgrade, idx);
+							int tupelUpgrade[9];
+							tupelUpgrade[0] = 2;
+							tupelUpgrade[1] = idA;
+							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
+							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
+							tupelUpgrade[6] = idx;
+							tupelUpgrade[7] = PosisiWahana.X;
+							tupelUpgrade[8] = PosisiWahana.Y;
+							tupelUpgrade[9] = DataPemain.Kuadran;
+							Push(&DaftarPerintah, tupelUpgrade);
+							HutangUang -= tupelUpgrade[2];
+							HutangBB1 -= tupelUpgrade[3];
+							HutangBB2 -= tupelUpgrade[4];
+							HutangBB3 -= tupelUpgrade[5];
+		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+						}
+						break;
+					case 'W':
+						PosisiWahana.X = DataPemain.PosisiPemain.Y - 1;
+						PosisiWahana.Y = DataPemain.PosisiPemain.X;
+						adN = SearchWahanaDenganIndeks(TreeUpgrade, idW);
+						LL = KemungkinanUpgrade(adN);
+						adLL = First(LL);
+						while(adLL != Nil){
+							i = 0;
+							found = false;
+							while(!found){
+								if(ListWahana[i].Indeks == InfoIdx(adLL)){
+									found = true;
+									printf("%d. ", ListWahana[i].Indeks);
+									printKata(ListWahana[i].Nama);
+									printf("\nMembangunnya akan membutuhkan %d Lungmen Dollar, %d D32 Steel, %d Bipolar Nanoflake, dan %d Polymerization Preparation\n", \
+									ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3);
+									printf("Membangunnya akan mengubah durasi wahana menjadi %d menit, harga tiket menjadi %d Lungmen Dollar, dan kapasitas menjadi %d orang\n", \
+									ListWahana[i].Durasi, ListWahana[i].HargaTiket, ListWahana[i].Kapasitas);
+								} else {
+									i++;
+								}
+							}
+							adLL = Next(adLL);
+						}
+						scanf("%d", &idx);
+						found = false;
+						DealokasiLL(&adLL);
+						adLL = First(LL);
+						while(!found && adLL != Nil){
+							if(InfoIdx(adLL) == idx){
+								found = true;
+							} else {
+								adLL = Next(adLL);
+							}
+						}
+						if(!found){
+							printf("Anda memasukkan indeks yang salah\n");
+						} else {
+							adN1 = SearchWahanaDenganIndeks(TreeUpgrade, idx);
+							int tupelUpgrade[9];
+							tupelUpgrade[0] = 2;
+							tupelUpgrade[1] = idA;
+							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
+							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
+							tupelUpgrade[6] = idx;
+							tupelUpgrade[7] = PosisiWahana.X;
+							tupelUpgrade[8] = PosisiWahana.Y;
+							tupelUpgrade[9] = DataPemain.Kuadran;
+							Push(&DaftarPerintah, tupelUpgrade);
+							HutangUang -= tupelUpgrade[2];
+							HutangBB1 -= tupelUpgrade[3];
+							HutangBB2 -= tupelUpgrade[4];
+							HutangBB3 -= tupelUpgrade[5];
+		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+						}						
+						break;
+					case 'S':
+						PosisiWahana.X = DataPemain.PosisiPemain.Y + 1;
+						PosisiWahana.Y = DataPemain.PosisiPemain.X;
+						adN = SearchWahanaDenganIndeks(TreeUpgrade, idS);
+						LL = KemungkinanUpgrade(adN);
+						adLL = First(LL);
+						while(adLL != Nil){
+							i = 0;
+							found = false;
+							while(!found){
+								if(ListWahana[i].Indeks == InfoIdx(adLL)){
+									found = true;
+									printf("%d. ", ListWahana[i].Indeks);
+									printKata(ListWahana[i].Nama);
+									printf("\nMembangunnya akan membutuhkan %d Lungmen Dollar, %d D32 Steel, %d Bipolar Nanoflake, dan %d Polymerization Preparation\n", \
+									ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3);
+									printf("Membangunnya akan mengubah durasi wahana menjadi %d menit, harga tiket menjadi %d Lungmen Dollar, dan kapasitas menjadi %d orang\n", \
+									ListWahana[i].Durasi, ListWahana[i].HargaTiket, ListWahana[i].Kapasitas);
+								} else {
+									i++;
+								}
+							}
+							adLL = Next(adLL);
+						}
+						scanf("%d", &idx);
+						found = false;
+						DealokasiLL(&adLL);
+						adLL = First(LL);
+						while(!found && adLL != Nil){
+							if(InfoIdx(adLL) == idx){
+								found = true;
+							} else {
+								adLL = Next(adLL);
+							}
+						}
+						if(!found){
+							printf("Anda memasukkan indeks yang salah\n");
+						} else {
+							adN1 = SearchWahanaDenganIndeks(TreeUpgrade, idx);
+							int tupelUpgrade[9];
+							tupelUpgrade[0] = 2;
+							tupelUpgrade[1] = idA;
+							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
+							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
+							tupelUpgrade[6] = idx;
+							tupelUpgrade[7] = PosisiWahana.X;
+							tupelUpgrade[8] = PosisiWahana.Y;
+							tupelUpgrade[9] = DataPemain.Kuadran;
+							Push(&DaftarPerintah, tupelUpgrade);
+							HutangUang -= tupelUpgrade[2];
+							HutangBB1 -= tupelUpgrade[3];
+							HutangBB2 -= tupelUpgrade[4];
+							HutangBB3 -= tupelUpgrade[5];
+		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+						}
+						break;
+					case 'D':
+						PosisiWahana.X = DataPemain.PosisiPemain.Y;
+						PosisiWahana.Y = DataPemain.PosisiPemain.X + 1;
+						adN = SearchWahanaDenganIndeks(TreeUpgrade, idD);
+						LL = KemungkinanUpgrade(adN);
+						adLL = First(LL);
+						while(adLL != Nil){
+							i = 0;
+							found = false;
+							while(!found){
+								if(ListWahana[i].Indeks == InfoIdx(adLL)){
+									found = true;
+									printf("%d. ", ListWahana[i].Indeks);
+									printKata(ListWahana[i].Nama);
+									printf("\nMembangunnya akan membutuhkan %d Lungmen Dollar, %d D32 Steel, %d Bipolar Nanoflake, dan %d Polymerization Preparation\n", \
+									ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3);
+									printf("Membangunnya akan mengubah durasi wahana menjadi %d menit, harga tiket menjadi %d Lungmen Dollar, dan kapasitas menjadi %d orang\n", \
+									ListWahana[i].Durasi, ListWahana[i].HargaTiket, ListWahana[i].Kapasitas);
+								} else {
+									i++;
+								}
+							}
+							adLL = Next(adLL);
+						}
+						scanf("%d", &idx);
+						found = false;
+						DealokasiLL(&adLL);
+						adLL = First(LL);
+						while(!found && adLL != Nil){
+							if(InfoIdx(adLL) == idx){
+								found = true;
+							} else {
+								adLL = Next(adLL);
+							}
+						}
+						if(!found){
+							printf("Anda memasukkan indeks yang salah\n");
+						} else {
+							adN1 = SearchWahanaDenganIndeks(TreeUpgrade, idx);
+							int tupelUpgrade[9];
+							tupelUpgrade[0] = 2;
+							tupelUpgrade[1] = idA;
+							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
+							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
+							tupelUpgrade[6] = idx;
+							tupelUpgrade[7] = PosisiWahana.X;
+							tupelUpgrade[8] = PosisiWahana.Y;
+							tupelUpgrade[9] = DataPemain.Kuadran;
+							Push(&DaftarPerintah, tupelUpgrade);
+							HutangUang -= tupelUpgrade[2];
+							HutangBB1 -= tupelUpgrade[3];
+							HutangBB2 -= tupelUpgrade[4];
+							HutangBB3 -= tupelUpgrade[5];
+		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+						}
+						break;
+					default:
+						printf("Mohon masukkan dengan benar, Tuan\n");
+						break;
+				}
 			}
 		} else if(isKataSama(kata_buy, Perintah)){
             printf("Menu Pembelian:\n");
@@ -766,7 +970,7 @@ int main() {
 			printf("Mau beli berapa?");
 			scanf("%d", &Jumlah);
 			printf("Baik, akan segera diproses\n");
-			printf("Mohon tunggu beberapa saat\n");
+			printf("Jangan lupa untuk melakukan eksekusi\n");
             int tupelBuy[9];
             tupelBuy[0] = 3;
             tupelBuy[1] = 0;
@@ -789,6 +993,10 @@ int main() {
 				tupelBuy[2] += -9*Jumlah;
 			}
 	        Push(&DaftarPerintah, tupelBuy);
+	        HutangUang -= tupelBuy[2];
+	        HutangBB1 -= tupelBuy[3];
+	        HutangBB2 -= tupelBuy[4];
+	        HutangBB3 -= tupelBuy[5];
             tambahWaktuManualP(durasiExecute, 0, 20);
 		} else if(isKataSama(kata_repair, Perintah)){
 			// Tampilkan wahana di sebelah pemain
@@ -798,6 +1006,7 @@ int main() {
 			if(StackKosong(DaftarPerintah)){
 				printf("Tidak ada perintah untuk dieksekusi\n");
 			} else {
+				int i;
 				// Copy Stack Perintah Agar Bisa Dijalankan dari paling Awal
 				while(!StackKosong(DaftarPerintah)){
 					Pop(&DaftarPerintah, &X);
@@ -819,12 +1028,25 @@ int main() {
 							WahanaDibangun NewWahana;
 
 							NewWahana.Indeks = X[1];
+							boolean found =false;
+							i = 0;
+							while(!found){
+								if(ListWahana[i].Indeks != X[1]){
+									i++;
+								} else {
+									NewWahana.Nama = ListWahana[i].Nama;
+									found = true;
+								}
+							}
 							NewWahana.Posisi.X = X[7];
 							NewWahana.Posisi.Y = X[8];
 							NewWahana.Kuadran = X[9];
 							NewWahana.Kerusakan = 0;
-
-							// MASIH BELUM PAS
+							LinkedList LL;
+							BuatLL(&LL);
+							InsVLast(&LL, X[1]);
+							NewWahana.Upgrade = LL;
+							
 							switch(X[9]){
 								case 1:
 									petaKuadran1.Isi[X[7]][X[8]] = 'W';
@@ -841,20 +1063,61 @@ int main() {
 							}
 							if(DataPemain.Kuadran == X[9] && DataPemain.PosisiPemain.Y == X[7] && DataPemain.PosisiPemain.X == X[8]){
 								DataPemain.SimbolPetak = 'W';
+							} else if(DataPemain.Kuadran == X[9] && DataPemain.PosisiPemain.Y == X[7] + 1 && DataPemain.PosisiPemain.X == X[8]){
+								SekitaranPemain.S = 'W';
+							} else if(DataPemain.Kuadran == X[9] && DataPemain.PosisiPemain.Y == X[7] - 1 && DataPemain.PosisiPemain.X == X[8]){
+								SekitaranPemain.W = 'W';
+							} else if(DataPemain.Kuadran == X[9] && DataPemain.PosisiPemain.Y == X[7] && DataPemain.PosisiPemain.X == X[8] - 1){
+								SekitaranPemain.D = 'W';
+							} else if(DataPemain.Kuadran == X[9] && DataPemain.PosisiPemain.Y == X[7] && DataPemain.PosisiPemain.X == X[8] + 1){
+								SekitaranPemain.A = 'W';
 							}
-
-							/////////////////
 
 							ListWahanaDibangun[BanyakWahanaDibangun] = NewWahana;
 							BanyakWahanaDibangun++;
-
+						
 							// Eksekusi Waktu
 							tambahWaktuMainManual(1, 0);
-
-							//printf("Selamat, wahana baru telah dibangun\n");
 							break;
 						case 2:
-								// Upgrade
+							Inventaris.Uang += X[2];
+							Inventaris.BahanBangunan1 += X[3];
+							Inventaris.BahanBangunan2 += X[4];
+							Inventaris.BahanBangunan3 += X[5];
+							
+							WahanaDibangun NewWahanaUp;
+
+							NewWahanaUp.Indeks = X[6];
+							found = false;
+							i = 0;
+							while(!found){
+								if(ListWahana[i].Indeks != X[6]){
+									i++;
+								} else {
+									NewWahanaUp.Nama = ListWahana[i].Nama;
+									found = true;
+								}
+							}
+							i = 0;
+							found = false;
+							while(!found){
+								if(ListWahanaDibangun[i].Posisi.X == X[7] && ListWahanaDibangun[i].Posisi.Y == X[8]){
+									found = true;
+								} else {
+									i++;
+								}
+							}
+							NewWahanaUp.Posisi.X = X[7];
+							NewWahanaUp.Posisi.Y = X[8];
+							NewWahanaUp.Kuadran = X[9];
+							NewWahanaUp.Kerusakan = 0;
+							
+							LinkedList LL1;
+							LL1 = ListWahanaDibangun[i].Upgrade;
+							InsVLast(&LL1, X[6]);
+							NewWahanaUp.Upgrade = LL1;
+							ListWahanaDibangun[i] = NewWahanaUp;
+							tambahWaktuMainManual(1, 30);
 							break;
 						case 3: // Buy
 							Inventaris.BahanBangunan1 += X[3];
@@ -895,9 +1158,10 @@ int main() {
 		} else if(isKataSama(kata_undo, Perintah)){
 			Tupel X;
 			if(StackKosong(DaftarPerintah)){
-				printf("Anda tidak memiliki perintah yang dapat diundo");
+				printf("Anda tidak memiliki perintah yang dapat diundo\n");
 			} else {
 				Pop(&DaftarPerintah, &X);
+				printf("Perintah terakhir Anda sudah dibatalkan\n");
 			}
 		} else if(isKataSama(kata_office, Perintah)){
 
@@ -929,7 +1193,7 @@ int main() {
             printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
 
             //printf("Input tidak dikenali, silakan ulangi.\n\n");
-        }
+       }
 
     } while(!isKataSama(kata_quit,Perintah));
 

@@ -61,3 +61,13 @@ void InsVLast(LinkedList *LL, int idx)
 	}
 }
 
+void PrintLL(LinkedList LL)
+{
+	addressLL ALL;
+	ALL = First(LL);
+	while(ALL != Nil){
+		printf("%d\n", InfoIdx(ALL));
+		ALL = Next(ALL);
+	}
+}
+
