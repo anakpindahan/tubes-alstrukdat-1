@@ -8,4 +8,12 @@ typedef struct {
     int Y;
 } Poin;
 
+/*  KETERANGAN:
+    Tidak ada fungsi atau prosedur tambahan
+    Tidak ada macro define untuk pengakses elemen dalam tipe data Poin, dilakukan dengan, misal:
+        Poin P
+        int koordX = Poin.X
+        int koordY = Poin.Y
+*/
+
 #endif

@@ -1,25 +1,5 @@
-//#ifndef _ADT_GRAFPETA_H
-//#define _ADT_GRAFPETA_H
-//#include "ADT_Peta.c"
-// _ADT_GRAFPETA_H
-
 #include <stdlib.h>
 #include "ADT_GrafPeta.h"
-//#include <stdio.h>
-//#define NULL NULL
-/*
-typedef struct {
-    Peta* TargetKuadranPeta;
-    Peta* AsalKuadranPeta;
-    char InputArah;
-} Garis;
-
-typedef struct {
-    Garis Edge[8];
-} GrafPeta;
-
-GrafPeta GrafUntukPeta;
-*/
 
 adrGrafNode GrafAlokNode (Peta* peta) {
     adrGrafNode Pn = (adrGrafNode) malloc (sizeof(GrafNode));
@@ -58,13 +38,9 @@ void GrafInsertNode (Graph G, Peta* peta) {
         adrGrafNode Ptemp = G.First;
 
         while (Ptemp->Next != NULL) {
-
             Ptemp = Ptemp->Next;
-
         }
-
         Ptemp->Next = Pn;
-
     }
 }
 
@@ -117,5 +93,3 @@ Peta* GrafSearchTarget(Graph G, Peta* peta_asal, char orientasi) {
 
     return Target->ID;
 }
-
-//#endif

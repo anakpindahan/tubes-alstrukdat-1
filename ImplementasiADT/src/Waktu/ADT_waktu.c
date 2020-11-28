@@ -12,8 +12,6 @@ Waktu WaktuMain;
 
 /**************KONSTRUKTOR************/
 void setWaktu(Waktu* waktu, int jam, int menit)
-/*I.S. */
-/*F.S. */
 {
 	Jam(*waktu) = jam;
 	Menit(*waktu) = menit;
@@ -21,8 +19,6 @@ void setWaktu(Waktu* waktu, int jam, int menit)
 
 /**************KELOMPOK BACA/TULIS*********/
 void printDalamFormatWaktu(Waktu waktu)
-/*I.S.*/
-/*F.S.*/
 {
     if (Jam(waktu) > 9) {
         printf("%d", Jam(waktu));
@@ -49,7 +45,7 @@ Waktu tambahWaktu(Waktu waktu1, Waktu waktu2){
 
 void tambahWaktuManualP(Waktu waktu, int jam, int menit){
 	int lebih;
-	Menit(waktu) += menit; 
+	Menit(waktu) += menit;
 	lebih = Menit(waktu) / 60;
 	Menit(waktu) %= 60;
 	Jam(waktu) += (lebih + jam);
@@ -60,7 +56,7 @@ Waktu tambahWaktuManualF(Waktu waktu, int jam, int menit){
 	Waktu waktuHasil;
 	int menitHasil;
 	int jamHasil;
-	menitHasil = menit + Menit(waktu); 
+	menitHasil = menit + Menit(waktu);
 	lebih = menitHasil / 60;
 	menitHasil = menitHasil % 60;
 	jamHasil = lebih + jam + Jam(waktu);
