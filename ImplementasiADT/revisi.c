@@ -330,6 +330,10 @@ int main() {
 
     ///// ///// ///// ///// /////
 
+    char dummyChar; // --> Kontainer untuk scanf '\n'
+
+    ///// ///// ///// ///// /////
+
     do {
         printf("\n");
 
@@ -608,7 +612,8 @@ int main() {
 				printf("Masukkan nomor wahana yang ingin dibangun.\n");
 
                 scanf("%d", &IDWahana);
-
+                //Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                scanf("%c", &dummyChar);
 
                 i = 0;
                 boolean found = false;
@@ -713,6 +718,8 @@ int main() {
 				addressNode adN1;
 				addressLL adLL;
 				scanf("%c", &input);
+                //Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                scanf("%c", &dummyChar);
 				switch(input){
 					case 'A':
 						PosisiWahana.X = DataPemain.PosisiPemain.Y ;
@@ -739,6 +746,8 @@ int main() {
 							adLL = Next(adLL);
 						}
 						scanf("%d", &idx);
+						//Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                        scanf("%c", &dummyChar);
 						found = false;
 						DealokasiLL(&adLL);
 						adLL = First(LL);
@@ -758,7 +767,7 @@ int main() {
 							tupelUpgrade[1] = idA;
 							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
 							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
-							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];
 							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
 							tupelUpgrade[6] = idx;
 							tupelUpgrade[7] = PosisiWahana.X;
@@ -769,7 +778,7 @@ int main() {
 							HutangBB1 -= tupelUpgrade[3];
 							HutangBB2 -= tupelUpgrade[4];
 							HutangBB3 -= tupelUpgrade[5];
-		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+		                	tambahWaktuManualP(durasiExecute, 1, 30);
 						}
 						break;
 					case 'W':
@@ -797,6 +806,8 @@ int main() {
 							adLL = Next(adLL);
 						}
 						scanf("%d", &idx);
+						//Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                        scanf("%c", &dummyChar);
 						found = false;
 						DealokasiLL(&adLL);
 						adLL = First(LL);
@@ -816,7 +827,7 @@ int main() {
 							tupelUpgrade[1] = idA;
 							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
 							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
-							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];
 							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
 							tupelUpgrade[6] = idx;
 							tupelUpgrade[7] = PosisiWahana.X;
@@ -827,8 +838,8 @@ int main() {
 							HutangBB1 -= tupelUpgrade[3];
 							HutangBB2 -= tupelUpgrade[4];
 							HutangBB3 -= tupelUpgrade[5];
-		                	tambahWaktuManualP(durasiExecute, 1, 30);							
-						}						
+		                	tambahWaktuManualP(durasiExecute, 1, 30);
+						}
 						break;
 					case 'S':
 						PosisiWahana.X = DataPemain.PosisiPemain.Y + 1;
@@ -855,6 +866,8 @@ int main() {
 							adLL = Next(adLL);
 						}
 						scanf("%d", &idx);
+						//Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                        scanf("%c", &dummyChar);
 						found = false;
 						DealokasiLL(&adLL);
 						adLL = First(LL);
@@ -874,7 +887,7 @@ int main() {
 							tupelUpgrade[1] = idA;
 							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
 							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
-							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];
 							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
 							tupelUpgrade[6] = idx;
 							tupelUpgrade[7] = PosisiWahana.X;
@@ -885,7 +898,7 @@ int main() {
 							HutangBB1 -= tupelUpgrade[3];
 							HutangBB2 -= tupelUpgrade[4];
 							HutangBB3 -= tupelUpgrade[5];
-		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+		                	tambahWaktuManualP(durasiExecute, 1, 30);
 						}
 						break;
 					case 'D':
@@ -913,6 +926,8 @@ int main() {
 							adLL = Next(adLL);
 						}
 						scanf("%d", &idx);
+						//Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                        scanf("%c", &dummyChar);
 						found = false;
 						DealokasiLL(&adLL);
 						adLL = First(LL);
@@ -932,7 +947,7 @@ int main() {
 							tupelUpgrade[1] = idA;
 							tupelUpgrade[2] = -1*InfoWahana(adN1)[1];
 							tupelUpgrade[3] = -1*InfoWahana(adN1)[2];
-							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];							
+							tupelUpgrade[4] = -1*InfoWahana(adN1)[3];
 							tupelUpgrade[5] = -1*InfoWahana(adN1)[4];
 							tupelUpgrade[6] = idx;
 							tupelUpgrade[7] = PosisiWahana.X;
@@ -943,7 +958,7 @@ int main() {
 							HutangBB1 -= tupelUpgrade[3];
 							HutangBB2 -= tupelUpgrade[4];
 							HutangBB3 -= tupelUpgrade[5];
-		                	tambahWaktuManualP(durasiExecute, 1, 30);							
+		                	tambahWaktuManualP(durasiExecute, 1, 30);
 						}
 						break;
 					default:
@@ -963,12 +978,18 @@ int main() {
             int Jumlah;
 
             scanf("%d", &Tipe);
+            //Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+            scanf("%c", &dummyChar);
             while(!((Tipe == 1) || (Tipe == 2) || (Tipe == 3))){
             	printf("Masukin yang bener\n");
             	scanf("%d", &Tipe);
+            	//Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+                scanf("%c", &dummyChar);
 			}
 			printf("Mau beli berapa?");
 			scanf("%d", &Jumlah);
+			//Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
+            scanf("%c", &dummyChar);
 			printf("Baik, akan segera diproses\n");
 			printf("Jangan lupa untuk melakukan eksekusi\n");
             int tupelBuy[9];
@@ -1046,7 +1067,7 @@ int main() {
 							BuatLL(&LL);
 							InsVLast(&LL, X[1]);
 							NewWahana.Upgrade = LL;
-							
+
 							switch(X[9]){
 								case 1:
 									petaKuadran1.Isi[X[7]][X[8]] = 'W';
@@ -1075,7 +1096,7 @@ int main() {
 
 							ListWahanaDibangun[BanyakWahanaDibangun] = NewWahana;
 							BanyakWahanaDibangun++;
-						
+
 							// Eksekusi Waktu
 							tambahWaktuMainManual(1, 0);
 							break;
@@ -1084,7 +1105,7 @@ int main() {
 							Inventaris.BahanBangunan1 += X[3];
 							Inventaris.BahanBangunan2 += X[4];
 							Inventaris.BahanBangunan3 += X[5];
-							
+
 							WahanaDibangun NewWahanaUp;
 
 							NewWahanaUp.Indeks = X[6];
@@ -1111,7 +1132,7 @@ int main() {
 							NewWahanaUp.Posisi.Y = X[8];
 							NewWahanaUp.Kuadran = X[9];
 							NewWahanaUp.Kerusakan = 0;
-							
+
 							LinkedList LL1;
 							LL1 = ListWahanaDibangun[i].Upgrade;
 							InsVLast(&LL1, X[6]);
