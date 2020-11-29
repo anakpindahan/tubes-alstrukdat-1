@@ -48,5 +48,14 @@ int main(){
 	PrintPrioQueue(Q);
 	DequeuePengunjung(&Q, &X);
 	PrintPrioQueue(Q);
+	
+	DealokasiQueue(&Q);
+	BuatQueue(&Q, 6);
+	EnqueuePengunjung(&Q, B);
+	PrintPrioQueue(Q);
+	
+	kesabaran(&Q);
+	PrintPrioQueue(Q);
+	
 	return 0;
 }

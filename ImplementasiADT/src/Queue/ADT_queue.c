@@ -25,7 +25,7 @@ int BanyakAnggotaQueue(PrioQueue Q)
 
 void BuatQueue(PrioQueue *Q, int Max)
 {
-	(*Q).P = (Pengunjung *) malloc (sizeof(Pengunjung));
+	(*Q).P = (Pengunjung *) malloc (Max * sizeof(Pengunjung));
 	if((*Q).P != NULL){
 		MaxEl(*Q) = Max;
 		Head(*Q) = NilQ;
