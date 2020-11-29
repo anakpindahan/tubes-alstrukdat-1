@@ -30,7 +30,7 @@ void BacaBahan_dari_File(char string[]);
 /* F.S. Daftar_Harga_Barang terdefinisi terdefinisi */
 /* Proses: membaca isi file kemudian disimpan dalam Daftar_Harga_Barang, Neff menyesuaikan dengan jumlah bahan bangunan terbaca*/
 
-void TulisIsiBahan (List_Info_Bahan B);
+void PrintMenuBuy (List_Info_Bahan B);
 /* Proses : Menuliskan isi tabel dengan traversal menurut Neff*/
 /* Contoh: Jika isi Tabel: [ [X, 20], [Y, 50] ]
    Maka tercetak di layar:

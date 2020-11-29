@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <time.h> // Untuk keperluan randomizer, bukan untuk waktu
 #include "./src/Boolean/boolean.h"
 #include "./src/Waktu/ADT_waktu.h"
 #include "./src/Kata/ADT_kata.h"
@@ -284,12 +285,6 @@ int main() {
     fclose(filePointer);
 
     int BanyakWahanaDibangun = 0;
-
-/*    for(i = 0; i < BanyakWahana; i++){
-    	printf("%d %d ", ListWahana[i].Indeks, ListWahana[i].Tipe);
-    	printKata(ListWahana[i].Nama);
-    	printf("%d %d %d %d %d %d %d\n", ListWahana[i].HargaTiket, ListWahana[i].HargaBangun.Uang, ListWahana[i].HargaBangun.BahanBangunan1, ListWahana[i].HargaBangun.BahanBangunan2, ListWahana[i].HargaBangun.BahanBangunan3, ListWahana[i].Durasi, ListWahana[i].Kapasitas);
-	}*/
 
     Tree TreeUpgrade;
     TupelUp DummyUpgrade;
@@ -616,6 +611,17 @@ int main() {
             GameStage.Phase = 0;
             GameStage.Day++;
 
+			petaKuadran2.Isi[1][1] = '-';
+			if(DataPemain.Kuadran == 2){
+				if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 2){
+					SekitaranPemain.W = '-';
+				} else if(DataPemain.PosisiPemain.Y == 1 && DataPemain.PosisiPemain.X == 2) {
+					SekitaranPemain.A = '-';
+				} else if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 1){
+					DataPemain.SimbolPetak = '-';
+				}
+			}
+
             system("cls");
             printStage();
             printPeta();
@@ -625,27 +631,44 @@ int main() {
             selisih = selisihTerhadapWaktuMain(waktuBuka);
             printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
         } else if (isKataSama(kata_main,Perintah) && GameStage.Phase == 0) {
-        	Tupel X;
-			HutangUang = 0;
-			HutangBB1 = 0;
-			HutangBB2 = 0;
-			HutangBB3 = 0;
-			setWaktu(&durasiExecute, 0, 0);
-			while(!StackKosong(DaftarPerintah)){
-        		Pop(&DaftarPerintah, &X);
+        	if(GameStage.Phase == 0){
+        		Tupel X;
+				HutangUang = 0;
+				HutangBB1 = 0;
+				HutangBB2 = 0;
+				HutangBB3 = 0;
+				setWaktu(&durasiExecute, 0, 0);
+				while(!StackKosong(DaftarPerintah)){
+	        		Pop(&DaftarPerintah, &X);
+				}
+				printf("Stack perintah Anda telah dikosongkan\n");
+	            setWaktu(&WaktuMain,9,0);
+	            GameStage.Phase = 1;
+				
+				// Menaruh antrean di peta kuadran 2
+				// Untuk sekarang asumsikan posisinya di pojok kiri atas
+				petaKuadran2.Isi[1][1] = 'A';
+				if(DataPemain.Kuadran == 2){
+					if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 2){
+						SekitaranPemain.W = 'A';
+					} else if(DataPemain.PosisiPemain.Y == 1 && DataPemain.PosisiPemain.X == 2) {
+						SekitaranPemain.A = 'A';
+					} else if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 1){
+						DataPemain.SimbolPetak = '-';
+					}
+				}
+				
+	            system("cls");
+	            printStage();
+	            printPeta();
+	            printInventaris();
+	            printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
+	            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
+	            selisih = selisihTerhadapWaktuMain(waktuTutup);
+	            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);	
+			} else {
+				printf("Perintah ini hanya bisa dilakukan saat fase preparasi\n");
 			}
-			printf("Stack perintah Anda telah dikosongkan\n");
-            setWaktu(&WaktuMain,9,0);
-            GameStage.Phase = 1;
-
-            system("cls");
-            printStage();
-            printPeta();
-            printInventaris();
-            printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
-            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
-            selisih = selisihTerhadapWaktuMain(waktuTutup);
-            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
         } else if (isKataSama(kata_quit,Perintah)) {
             printf("\nNoice\n");
         } else if (isKataSama(kata_build,Perintah)) {
@@ -1105,8 +1128,7 @@ int main() {
 	            tambahWaktuManualP(durasiExecute, 0, 20);
 			}
 		} else if(isKataSama(kata_repair, Perintah)){
-			// Tampilkan wahana di sebelah pemain
-			// Pilih wahana
+			
 		} else if(isKataSama(kata_execute, Perintah)){
 			Tupel X;
 			if(diMainPhase(WaktuMain)){
@@ -1251,7 +1273,27 @@ int main() {
 					// Skip langsung ke MainPhase
 		            setWaktu(&WaktuMain,9,0);
 		            GameStage.Phase = 1;
-
+					
+					// idem main
+					if(BanyakWahanaDibangun > 0){
+						petaKuadran2.Isi[1][1] = 'A';
+						if(DataPemain.Kuadran == 2){
+							if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 2){
+								SekitaranPemain.W = 'A';
+							} else if(DataPemain.PosisiPemain.Y == 1 && DataPemain.PosisiPemain.X == 2) {
+								SekitaranPemain.A = 'A';
+							} else if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 1){
+								DataPemain.SimbolPetak = '-';
+							}
+						}
+						
+						srand(time(0));
+						int r = rand();
+						r += r % (BanyakWahanaDibangun + 1);
+						
+					}
+					
+					
 		            system("cls");
 		            printStage();
 		            printPeta();
@@ -1276,7 +1318,7 @@ int main() {
 		} else if(isKataSama(kata_office, Perintah)){
 
 		} else if(isKataSama(kata_serve, Perintah)){
-
+			
 		} else if(isKataSama(kata_repair, Perintah)){
 
 		} else if(isKataSama(kata_detail, Perintah)){
@@ -1367,7 +1409,6 @@ int main() {
 										j++;
 									}
 								}
-								printf("jashas\n");
 								printf("-------------DETAIL WAHANA-------------\n");
 								printf("Nama: ");
 								printKata(ListWahanaDibangun[i].Nama);
