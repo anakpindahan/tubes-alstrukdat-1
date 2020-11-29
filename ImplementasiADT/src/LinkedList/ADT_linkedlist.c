@@ -65,9 +65,11 @@ void PrintLL(LinkedList LL)
 {
 	addressLL ALL;
 	ALL = First(LL);
-	while(ALL != Nil){
-		printf("%d\n", InfoIdx(ALL));
+	printf("%d", InfoIdx(ALL));
+	while(Next(ALL) != Nil){
 		ALL = Next(ALL);
+		printf(" -> %d", InfoIdx(ALL));
 	}
+	printf("\n");
 }
 
