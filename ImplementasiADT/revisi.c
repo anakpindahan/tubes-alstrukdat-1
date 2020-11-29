@@ -12,6 +12,7 @@
 #include "./src/LinkedList/ADT_linkedlist.h"
 #include "./src/Poin/ADT_poin.h"
 #include "./src/array/array.h"
+#include "./src/Queue/ADT_queue.h"
 
 char dummyChar; // --> Kontainer untuk scanf '\n'
 char nama_pemain[50]; // --> Kontainer untuk nama pemain
@@ -373,6 +374,8 @@ int main() {
     Kata kata_office = createKata("office");
     Kata kata_serve = createKata("serve");
     Kata kata_detail = createKata("detail");
+    Kata kata_Reports = createKata("Reports");
+    Kata kata_Exit = createKata("Exit");
 
     char k_perintah[50];
 
@@ -393,7 +396,7 @@ int main() {
 
     ///// ///// ///// ///// /////
 
-    BacaBahan_dari_File("material.txt");
+    BacaBahan_dari_File("materials.txt");
 
     ///// ///// ///// ///// /////
 
@@ -403,57 +406,155 @@ int main() {
         Perintah = readInput();
 
         if (isKataSama(kata_w,Perintah)) {
-            if (SekitaranPemain.W == '-') {
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
+        	if(SekitaranPemain.W == 'O'){
+        		DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
                 DataPemain.PosisiPemain.Y--;
                 DataPemain.SimbolPetak = SekitaranPemain.W;
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
                 update();
-                tambahWaktuMainManual(0,1);
-            } else if (SekitaranPemain.W == '^') {
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.Y = Identitas_Peta.Map_Y_Max;
-                pindahPeta(Perintah, DataPemain.KuadranPeta);
-                DataPemain.SimbolPetak = '-';
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
-                if(DataPemain.Kuadran == 3){
-                	DataPemain.Kuadran = 2;
-				} else if(DataPemain.Kuadran == 4){
-					DataPemain.Kuadran = 1;
-				}
-				update();
-                tambahWaktuMainManual(0,1);
-            } else if (SekitaranPemain.W == 'O') {
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.Y--;
-                DataPemain.SimbolPetak = SekitaranPemain.W;
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
-                update();
-                tambahWaktuMainManual(0,1);
-            }
-
-            if (GameStage.Phase == 0 && WaktuMain.Jam == waktuBuka.Jam && WaktuMain.Menit == waktuBuka.Menit) {
-                GameStage.Phase = 1;
-            } else if (GameStage.Phase == 1 && WaktuMain.Jam == waktuTutup.Jam && WaktuMain.Menit == waktuTutup.Menit) {
-                GameStage.Phase = 0;
-                GameStage.Day++;
-            }
-
-            system("cls");
-            printStage();
-            printPeta();
-            printInventaris();
-            printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
-
-            if (GameStage.Phase == 0) {
-                printf("Buka pukul: "); printDalamFormatWaktu(waktuBuka);
-                selisih = selisihTerhadapWaktuMain(waktuBuka);
-            } else if (GameStage.Phase == 1) {
-                printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
-                selisih = selisihTerhadapWaktuMain(waktuTutup);
-            }
-
-            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
+                tambahWaktuMainManual(0,1);	
+                system("cls");
+                
+                Kata inoffice;
+				do{
+                	printf("------------SELAMAT DATANG DI WILLY WANGKY\'S OFFICE------------\n");
+                	printf("Silahkan masukkan perintah yang ingin dilakukan:\n");
+					printf("1. office: Melihat detail semua wahana yang ada\n");
+					printf("2. Reports: Melihat laporan wahana\n");
+					printf("3. Exit: Keluar menu office\n");
+					printf("Silahkan masukkan perintah:\n");
+					Kata inoffice;
+					inoffice = readInput();
+					if(isKataSama(kata_office, inoffice)){
+						// TAMPILKAN DETAIL
+						int i = 0, j = 0;
+						int X;
+						char Dummy;
+						if(BanyakWahanaDibangun == 0){
+							printf("Belum ada wahana yang dibangun, coba bangun beberapa wahana\n");
+							scanf("%c", &Dummy);
+							system("cls");
+						} else {
+							for(i = 0; i < BanyakWahanaDibangun;i++){
+								printf("%d. ", i);
+								printKata(ListWahanaDibangun[i].Nama);
+								printf("\n");
+							}
+							printf("Silahkan masukkan nomor wahana yang ingin dilihat:\n");
+							scanf("%d", &X);
+							char Dummy;
+							scanf("%c", &Dummy);
+							
+							boolean found = false;
+							while(!found){
+								if(ListWahana[j].Indeks == ListWahanaDibangun[X].Indeks){
+									found = true;
+								} else {
+									j++;
+								}
+							}
+							
+							printf("-------------DETAIL WAHANA-------------\n");
+							printf("Nama: ");
+							printKata(ListWahanaDibangun[X].Nama);
+							printf("\nTipe Wahana: %d\n", ListWahana[j].Tipe);
+							printf("Indeks Wahana: %d\n", ListWahana[j].Indeks);
+							printf("Harga Tiket Wahana: %d Lungmen Dollar\n", ListWahana[j].HargaTiket);
+							printf("Lokasi wahana: (%d, %d) di kuadran %d\n", ListWahanaDibangun[X].Posisi.X, ListWahanaDibangun[X].Posisi.Y, ListWahanaDibangun[X].Kuadran);
+							printf("Deskripsi wahana: ");
+							printKata(ListWahana[j].Deskripsi);
+							printf("\nKapasitas wahana: %d orang\n", ListWahana[j].Kapasitas);
+							printf("History Upgrade Wahana:\n");
+							PrintLL(ListWahanaDibangun[X].Upgrade);
+							addressLL aLL = First(ListWahanaDibangun[X].Upgrade);
+							found = false;
+							i = 0;
+							printf("(");
+							while(!found){
+								if(ListWahana[i].Indeks == InfoIdx(aLL)){
+									found = true;
+								} else {
+									i++;
+								}
+							}
+							printKata(ListWahana[i].Nama);
+							while(Next(aLL) != Nil){
+								aLL = Next(aLL);
+								found = false;
+								i = 0;
+								while(!found){
+									if(ListWahana[i].Indeks == InfoIdx(aLL)){
+										found = true;
+										printf(" -> ");
+										printKata(ListWahana[i].Nama);
+									} else {
+										i++;
+									}
+								}
+							}
+							printf(")\n");
+							printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);	
+							scanf("%c", &Dummy);
+							system("cls");						
+						}
+					} else if(isKataSama(kata_Reports, inoffice)){
+						// TAMPILKAN LAPORAN
+					} else if(isKataSama(kata_Exit, inoffice)) {
+						printf("Terima kasih sudah berkunjung ke office hari ini\n");
+						sleep(1);
+						system("cls");
+						break;
+					} else {
+						printf("Perintah tidak dikenal\n");
+						sleep(1);
+						system("cls");
+					}
+				} while(!isKataSama(kata_Exit, inoffice));
+			} else {
+				if (SekitaranPemain.W == '-') {
+	                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
+	                DataPemain.PosisiPemain.Y--;
+	                DataPemain.SimbolPetak = SekitaranPemain.W;
+	                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
+	                update();
+	                tambahWaktuMainManual(0,1);
+	            } else if (SekitaranPemain.W == '^') {
+	                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
+	                DataPemain.PosisiPemain.Y = Identitas_Peta.Map_Y_Max;
+	                pindahPeta(Perintah, DataPemain.KuadranPeta);
+	                DataPemain.SimbolPetak = '-';
+	                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
+	                if(DataPemain.Kuadran == 3){
+	                	DataPemain.Kuadran = 2;
+					} else if(DataPemain.Kuadran == 4){
+						DataPemain.Kuadran = 1;
+					}
+					update();
+	                tambahWaktuMainManual(0,1);
+	            } 
+			}
+			if (GameStage.Phase == 0 && WaktuMain.Jam == waktuBuka.Jam && WaktuMain.Menit == waktuBuka.Menit) {
+	            GameStage.Phase = 1;
+	        } else if (GameStage.Phase == 1 && WaktuMain.Jam == waktuTutup.Jam && WaktuMain.Menit == waktuTutup.Menit) {
+	            GameStage.Phase = 0;
+	            GameStage.Day++;
+	        }
+	
+	        system("cls");
+	        printStage();
+	        printPeta();
+	        printInventaris();
+	        printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
+	
+	        if (GameStage.Phase == 0) {
+	            printf("Buka pukul: "); printDalamFormatWaktu(waktuBuka);
+	            selisih = selisihTerhadapWaktuMain(waktuBuka);
+	        } else if (GameStage.Phase == 1) {
+	            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
+	            selisih = selisihTerhadapWaktuMain(waktuTutup);
+	        }
+	
+	        printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
         } else if (isKataSama(kata_a,Perintah)) {
             if (SekitaranPemain.A == '-') {
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
@@ -559,34 +660,133 @@ int main() {
 
             printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
         } else if (isKataSama(kata_d,Perintah)) {
-            if (SekitaranPemain.D == '-') {
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
+        	if(SekitaranPemain.D == 'O'){
+        		DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
                 DataPemain.PosisiPemain.X++;
                 DataPemain.SimbolPetak = SekitaranPemain.D;
                 DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
                 update();
                 tambahWaktuMainManual(0,1);
-            } else if (SekitaranPemain.D == '>') {
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.X = Identitas_Peta.Map_X_Min;
-                pindahPeta(Perintah,DataPemain.KuadranPeta);
-                DataPemain.SimbolPetak = '-';
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
-                if(DataPemain.Kuadran == 2){
-                	DataPemain.Kuadran = 1;
-				} else if(DataPemain.Kuadran ==3){
-					DataPemain.Kuadran = 4;
-				}
-				update();
-                tambahWaktuMainManual(0,1);
-            } else if (SekitaranPemain.D == 'O') {
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
-                DataPemain.PosisiPemain.X++;
-                DataPemain.SimbolPetak = SekitaranPemain.D;
-                DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
-                update();
-                tambahWaktuMainManual(0,1);
-            }
+                system("cls");
+                
+                Kata inoffice;
+				do{
+                	printf("------------SELAMAT DATANG DI WILLY WANGKY\'S OFFICE------------\n");
+                	printf("Silahkan masukkan perintah yang ingin dilakukan:\n");
+					printf("1. office: Melihat detail semua wahana yang ada\n");
+					printf("2. Reports: Melihat laporan wahana\n");
+					printf("3. Exit: Keluar menu office\n");
+					printf("Silahkan masukkan perintah:\n");
+					Kata inoffice;
+					inoffice = readInput();
+					if(isKataSama(kata_office, inoffice)){
+						// TAMPILKAN DETAIL
+						int i = 0, j = 0;
+						int X;
+						char Dummy;
+						if(BanyakWahanaDibangun == 0){
+							printf("Belum ada wahana yang dibangun, coba bangun beberapa wahana\n");
+							scanf("%c", &Dummy);
+							system("cls");
+						} else {
+							for(i = 0; i < BanyakWahanaDibangun;i++){
+								printf("%d. ", i);
+								printKata(ListWahanaDibangun[i].Nama);
+								printf("\n");
+							}
+							printf("Silahkan masukkan nomor wahana yang ingin dilihat:\n");
+							scanf("%d", &X);
+							char Dummy;
+							scanf("%c", &Dummy);
+							
+							boolean found = false;
+							while(!found){
+								if(ListWahana[j].Indeks == ListWahanaDibangun[X].Indeks){
+									found = true;
+								} else {
+									j++;
+								}
+							}
+							
+							printf("-------------DETAIL WAHANA-------------\n");
+							printf("Nama: ");
+							printKata(ListWahanaDibangun[X].Nama);
+							printf("\nTipe Wahana: %d\n", ListWahana[j].Tipe);
+							printf("Indeks Wahana: %d\n", ListWahana[j].Indeks);
+							printf("Harga Tiket Wahana: %d Lungmen Dollar\n", ListWahana[j].HargaTiket);
+							printf("Lokasi wahana: (%d, %d) di kuadran %d\n", ListWahanaDibangun[X].Posisi.X, ListWahanaDibangun[X].Posisi.Y, ListWahanaDibangun[X].Kuadran);
+							printf("Deskripsi wahana: ");
+							printKata(ListWahana[j].Deskripsi);
+							printf("\nKapasitas wahana: %d orang\n", ListWahana[j].Kapasitas);
+							printf("History Upgrade Wahana:\n");
+							PrintLL(ListWahanaDibangun[X].Upgrade);
+							addressLL aLL = First(ListWahanaDibangun[X].Upgrade);
+							found = false;
+							i = 0;
+							printf("(");
+							while(!found){
+								if(ListWahana[i].Indeks == InfoIdx(aLL)){
+									found = true;
+								} else {
+									i++;
+								}
+							}
+							printKata(ListWahana[i].Nama);
+							while(Next(aLL) != Nil){
+								aLL = Next(aLL);
+								found = false;
+								i = 0;
+								while(!found){
+									if(ListWahana[i].Indeks == InfoIdx(aLL)){
+										found = true;
+										printf(" -> ");
+										printKata(ListWahana[i].Nama);
+									} else {
+										i++;
+									}
+								}
+							}
+							printf(")\n");
+							printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);	
+							scanf("%c", &Dummy);
+							system("cls");						
+						}
+					} else if(isKataSama(kata_Reports, inoffice)){
+						// TAMPILKAN LAPORAN
+					} else if(isKataSama(kata_Exit, inoffice)) {
+						printf("Terima kasih sudah berkunjung ke office hari ini\n");
+						sleep(1);
+						system("cls");
+						break;
+					} else {
+						printf("Perintah tidak dikenal\n");
+						sleep(1);
+						system("cls");
+					}
+				} while(!isKataSama(kata_Exit, inoffice));                
+			} else {
+				if (SekitaranPemain.D == '-') {
+                	DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
+                	DataPemain.PosisiPemain.X++;
+                	DataPemain.SimbolPetak = SekitaranPemain.D;
+                	DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
+                	update();
+                	tambahWaktuMainManual(0,1);
+            	} else if (SekitaranPemain.D == '>') {
+                	DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPetak;
+                	DataPemain.PosisiPemain.X = Identitas_Peta.Map_X_Min;
+                	pindahPeta(Perintah,DataPemain.KuadranPeta);
+                	DataPemain.SimbolPetak = '-';
+                	DataPemain.KuadranPeta->Isi[DataPemain.PosisiPemain.Y][DataPemain.PosisiPemain.X] = DataPemain.SimbolPemain;
+                	if(DataPemain.Kuadran == 2){
+                		DataPemain.Kuadran = 1;
+					} else if(DataPemain.Kuadran ==3){
+						DataPemain.Kuadran = 4;
+					}
+					update();
+                	tambahWaktuMainManual(0,1);
+            	}	
+			}
 
             if (GameStage.Phase == 0 && WaktuMain.Jam == waktuBuka.Jam && WaktuMain.Menit == waktuBuka.Menit) {
                 GameStage.Phase = 1;
@@ -1261,53 +1461,47 @@ int main() {
 
 							// Eksekusi Waktu
 							tambahWaktuMainManual(0, 20);
-							//printf("Selamat, Anda telah berhasil membeli barang\n");
 							break;
-
-
 					}
+				}
+				
+				// Reset penghitungan waktu dan resource yang dibutuhkan
+				HutangUang = 0;
+				HutangBB1 = 0;
+				HutangBB2 = 0;
+				HutangBB3 = 0;
+				setWaktu(&durasiExecute, 0, 0);
 
-					// Reset penghitungan waktu dan resource yang dibutuhkan
-					HutangUang = 0;
-					HutangBB1 = 0;
-					HutangBB2 = 0;
-					HutangBB3 = 0;
-					setWaktu(&durasiExecute, 0, 0);
+				// Skip langsung ke MainPhase
+		        setWaktu(&WaktuMain,9,0);
+		        GameStage.Phase = 1;
 
-					// Skip langsung ke MainPhase
-		            setWaktu(&WaktuMain,9,0);
-		            GameStage.Phase = 1;
-
-					// idem main
-					if(BanyakWahanaDibangun > 0){
-						petaKuadran2.Isi[1][1] = 'A';
-						if(DataPemain.Kuadran == 2){
-							if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 2){
-								SekitaranPemain.W = 'A';
-							} else if(DataPemain.PosisiPemain.Y == 1 && DataPemain.PosisiPemain.X == 2) {
-								SekitaranPemain.A = 'A';
-							} else if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 1){
-								DataPemain.SimbolPetak = '-';
-							}
+				// idem main
+				if(BanyakWahanaDibangun > 0){
+					petaKuadran2.Isi[1][1] = 'A';
+					if(DataPemain.Kuadran == 2){
+						if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 2){
+							SekitaranPemain.W = 'A';
+						} else if(DataPemain.PosisiPemain.Y == 1 && DataPemain.PosisiPemain.X == 2) {
+							SekitaranPemain.A = 'A';
+						} else if(DataPemain.PosisiPemain.X == 1 && DataPemain.PosisiPemain.Y == 1){
+							DataPemain.SimbolPetak = '-';
 						}
-
-						srand(time(0));
-						int r = rand();
-						r += r % (BanyakWahanaDibangun + 1);
-
 					}
 
-
-		            system("cls");
-		            printStage();
-		            printPeta();
-		            printInventaris();
-		            printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
-		            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
-		            selisih = selisihTerhadapWaktuMain(waktuTutup);
-		            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
+					srand(time(0));
+					int r = rand();
+					r += r % (BanyakWahanaDibangun + 1);
 
 				}
+		        system("cls");
+		        printStage();
+		        printPeta();
+		        printInventaris();
+		        printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
+		        printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
+		        selisih = selisihTerhadapWaktuMain(waktuTutup);
+		        printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
 			}
 		} else if(isKataSama(kata_undo, Perintah)){
 			Tupel X;
@@ -1320,7 +1514,7 @@ int main() {
 				printf("Perintah terakhir Anda sudah dibatalkan\n");
 			}
 		} else if(isKataSama(kata_office, Perintah)){
-
+			printf("Perintah ini hanya dapat dijalankan melalui office saja\n");
 		} else if(isKataSama(kata_serve, Perintah)){
 
 		} else if(isKataSama(kata_repair, Perintah)){
@@ -1418,11 +1612,11 @@ int main() {
 								printKata(ListWahanaDibangun[i].Nama);
 								printf("\nTipe Wahana: %d\n", ListWahana[j].Tipe);
 								printf("Indeks Wahana: %d\n", ListWahana[j].Indeks);
-								printf("Harga Tiket Wahana: %d\n", ListWahana[j].HargaTiket);
+								printf("Harga Tiket Wahana: %d Lungmen Dollar\n", ListWahana[j].HargaTiket);
 								printf("Lokasi wahana: (%d, %d) di kuadran %d\n", ListWahanaDibangun[i].Posisi.X, ListWahanaDibangun[i].Posisi.Y, ListWahanaDibangun[i].Kuadran);
 								printf("Deskripsi wahana: ");
 								printKata(ListWahana[j].Deskripsi);
-								printf("\nKapasitas wahana: %d\n", ListWahana[j].Kapasitas);
+								printf("\nKapasitas wahana: %d orang\n", ListWahana[j].Kapasitas);
 								printf("History Upgrade Wahana:\n");
 								PrintLL(ListWahanaDibangun[i].Upgrade);
 								addressLL aLL = First(ListWahanaDibangun[i].Upgrade);
@@ -1481,11 +1675,11 @@ int main() {
 								printKata(ListWahanaDibangun[i].Nama);
 								printf("\nTipe Wahana: %d\n", ListWahana[j].Tipe);
 								printf("Indeks Wahana: %d\n", ListWahana[j].Indeks);
-								printf("Harga Tiket Wahana: %d\n", ListWahana[j].HargaTiket);
+								printf("Harga Tiket Wahana: %d Lungmen Dollar\n", ListWahana[j].HargaTiket);
 								printf("Lokasi wahana: (%d, %d) di kuadran %d\n", ListWahanaDibangun[i].Posisi.X, ListWahanaDibangun[i].Posisi.Y, ListWahanaDibangun[i].Kuadran);
 								printf("Deskripsi wahana: ");
 								printKata(ListWahana[j].Deskripsi);
-								printf("\nKapasitas wahana: %d\n", ListWahana[j].Kapasitas);
+								printf("\nKapasitas wahana: %d orang\n", ListWahana[j].Kapasitas);
 								printf("History Upgrade Wahana:\n");
 								PrintLL(ListWahanaDibangun[i].Upgrade);
 								addressLL aLL = First(ListWahanaDibangun[i].Upgrade);
@@ -1544,11 +1738,11 @@ int main() {
 								printKata(ListWahanaDibangun[i].Nama);
 								printf("\nTipe Wahana: %d\n", ListWahana[j].Tipe);
 								printf("Indeks Wahana: %d\n", ListWahana[j].Indeks);
-								printf("Harga Tiket Wahana: %d\n", ListWahana[j].HargaTiket);
+								printf("Harga Tiket Wahana: %d Lungmen Dollar\n", ListWahana[j].HargaTiket);
 								printf("Lokasi wahana: (%d, %d) di kuadran %d\n", ListWahanaDibangun[i].Posisi.X, ListWahanaDibangun[i].Posisi.Y, ListWahanaDibangun[i].Kuadran);
 								printf("Deskripsi wahana: ");
 								printKata(ListWahana[j].Deskripsi);
-								printf("\nKapasitas wahana: %d\n", ListWahana[j].Kapasitas);
+								printf("\nKapasitas wahana: %d orang\n", ListWahana[j].Kapasitas);
 								printf("History Upgrade Wahana:\n");
 								PrintLL(ListWahanaDibangun[i].Upgrade);
 								addressLL aLL = First(ListWahanaDibangun[i].Upgrade);
@@ -1607,11 +1801,11 @@ int main() {
 								printKata(ListWahanaDibangun[i].Nama);
 								printf("\nTipe Wahana: %d\n", ListWahana[j].Tipe);
 								printf("Indeks Wahana: %d\n", ListWahana[j].Indeks);
-								printf("Harga Tiket Wahana: %d\n", ListWahana[j].HargaTiket);
+								printf("Harga Tiket Wahana: %d Lungmen Dollar\n", ListWahana[j].HargaTiket);
 								printf("Lokasi wahana: (%d, %d) di kuadran %d\n", ListWahanaDibangun[i].Posisi.X, ListWahanaDibangun[i].Posisi.Y, ListWahanaDibangun[i].Kuadran);
 								printf("Deskripsi wahana: ");
 								printKata(ListWahana[j].Deskripsi);
-								printf("\nKapasitas wahana: %d\n", ListWahana[j].Kapasitas);
+								printf("\nKapasitas wahana: %d orang\n", ListWahana[j].Kapasitas);
 								printf("History Upgrade Wahana:\n");
 								PrintLL(ListWahanaDibangun[i].Upgrade);
 								addressLL aLL = First(ListWahanaDibangun[i].Upgrade);

@@ -87,7 +87,7 @@ void PrintPrioQueue (PrioQueue Q)
 	printf("#\n");	
 }
 
-void kesabaran (Queue * Q){
+void kesabaran (PrioQueue * Q){
 /* I.S. Q terdefinisi
    F.S. Kesabaran seluruh pelanggan berkurang 1.
 */
