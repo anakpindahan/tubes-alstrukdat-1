@@ -1,0 +1,6 @@
+bayi;10000
+hati;5000
+ilmu;1000
+hargadiri;2500
+airmata;500
+keyakinan;3000
