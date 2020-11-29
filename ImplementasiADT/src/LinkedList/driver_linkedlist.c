@@ -13,14 +13,17 @@ int main() {
 
     BuatLL(&LL);
     if (LLKosong(LL)) {
-        printf("List struktur berkait terbuat, kosong.\n");
+        printf("List struktur berkait terbuat, kosong.\n"); // --> Uji kosong
     }
 
-    InsVLast(&LL, &e1);
+    LL.first = AlokasiLL(e1); // --> Alokasi elemen pertama
+
+    PrintLL(LL);
+    InsVLast(&LL, e2); // --> Uji fungsi insert elemen
     PrintLL(LL);
 
-    LP = AlokasiLL(&e2);
+    InsVLast(&LL, e1);
     PrintLL(LL);
-    
+
     return 0;
 }
