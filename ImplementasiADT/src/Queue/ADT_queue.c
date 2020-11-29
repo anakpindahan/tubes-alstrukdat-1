@@ -1,3 +1,4 @@
+
 #include "../Boolean/boolean.h"
 #include "ADT_queue.h"
 #include <stdio.h>
@@ -84,4 +85,21 @@ void PrintPrioQueue (PrioQueue Q)
 		}
 	}
 	printf("#\n");	
+}
+
+void kesabaran (Queue * Q){
+/* I.S. Q terdefinisi
+   F.S. Kesabaran seluruh pelanggan berkurang 1.
+*/
+     Pengunjung X;
+     if (!QueueKosong(*Q)){
+          int i = Head(*Q);
+          while(i <= Tail(*Q)){
+               Sabar(Elmt(*Q,i))--;
+               i++;
+          }
+          while (Sabar(InfoHead(*Q)) == 0 && !QueueKosong(*Q)){
+               DequeuePengunjung(Q,&X);
+          }
+     }
 }
