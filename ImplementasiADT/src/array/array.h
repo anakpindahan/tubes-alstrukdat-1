@@ -5,7 +5,7 @@
 #define ARRAY_H
 
 #include "../Boolean/boolean.h"
-#include "../Kata/ADT_kata.h"
+
 
 typedef struct {
   Kata nama_bahan;              /* Tipe Bahan Bangunan */

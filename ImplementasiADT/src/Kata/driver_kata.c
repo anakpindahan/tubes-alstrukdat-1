@@ -2,6 +2,7 @@
 
 int main () {
     //Uji ADT dan fungsi
+    printf("Ketikkan 'sesuatu'\n");
     Kata kata_sesuatu = createKata("sesuatu"); // --> Membuat kata dari string yang sudah ada
     Kata kata1 = readInput(); // --> Membuat kata dari input
 

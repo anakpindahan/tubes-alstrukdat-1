@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include "../Kata/ADT_kata.c"
 #include "array.h"
+
 
 List_Info_Bahan Daftar_Harga_Bahan;
 
