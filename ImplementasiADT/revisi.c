@@ -10,6 +10,7 @@
 #include "./src/GrafPeta/ADT_GrafPeta.h"
 #include "./src/LinkedList/ADT_linkedlist.h"
 #include "./src/Poin/ADT_poin.h"
+#include "./src/array/array.h"
 
 char dummyChar; // --> Kontainer untuk scanf '\n'
 char nama_pemain[50]; // --> Kontainer untuk nama pemain
@@ -723,7 +724,7 @@ int main() {
 			} else if(!(wahanaSekitar[0] || wahanaSekitar[1] || wahanaSekitar[2] || wahanaSekitar[3])){
 				printf("Tidak ada wahana yang dapat diupgrade di sekitar sini\n");
 			} else if(diMainPhase(tambahWaktu(WaktuMain, tambahWaktuManualF(durasiExecute, 1, 30)))){
-				printf("Waktu eksekusi tidak akan mencukupi\n");				
+				printf("Waktu eksekusi tidak akan mencukupi\n");
 			} else {
 				char input;
 				int i;
@@ -913,7 +914,7 @@ int main() {
 								HutangBB2 -= tupelUpgrade[4];
 								HutangBB3 -= tupelUpgrade[5];
 			                	tambahWaktuManualP(durasiExecute, 1, 30);
-							}							
+							}
 						}
 						break;
 					case 'S':
@@ -977,7 +978,7 @@ int main() {
 								HutangBB2 -= tupelUpgrade[4];
 								HutangBB3 -= tupelUpgrade[5];
 			                	tambahWaktuManualP(durasiExecute, 1, 30);
-							}							
+							}
 						}
 						break;
 					case 'D':
@@ -1041,7 +1042,7 @@ int main() {
 								HutangBB2 -= tupelUpgrade[4];
 								HutangBB3 -= tupelUpgrade[5];
 			                	tambahWaktuManualP(durasiExecute, 1, 30);
-							}						
+							}
 						}
 						break;
 					default:
@@ -1055,16 +1056,11 @@ int main() {
 			} else if(diMainPhase(tambahWaktu(WaktuMain, tambahWaktuManualF(durasiExecute, 0, 20)))){
 				printf("Waktu eksekusi tidak mencukupi\n");
 			} else {
-				printf("Menu Pembelian:\n");
-	            printf("\t1. D32 Steel: 5 LMD\n");
-	            printf("\t2. Bipolar Nanoflake: 7 LMD\n");
-	            printf("\t3. Polymerization Preparation: 8 LMD\n");
-	            printf("\n");
-	            printf("Tuliskan angka dari benda yang ingin dibeli\n");
-	
+                PrintMenuBuy(Daftar_Harga_Bahan);
+
 	            char Tipe;
 	            int Jumlah;
-	
+
 	            scanf("%d", &Tipe);
 	            //Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
 	            scanf("%c", &dummyChar);
@@ -1270,7 +1266,7 @@ int main() {
 		} else if(isKataSama(kata_undo, Perintah)){
 			Tupel X;
 			if(diMainPhase(WaktuMain)){
-				printf("Hanya bisa membatalkan perintah pada fase preparasi\n");	
+				printf("Hanya bisa membatalkan perintah pada fase preparasi\n");
 			} else if(StackKosong(DaftarPerintah)){
 				printf("Anda tidak memiliki perintah yang dapat diundo\n");
 			} else {
@@ -1278,7 +1274,7 @@ int main() {
 				printf("Perintah terakhir Anda sudah dibatalkan\n");
 			}
 		} else if(isKataSama(kata_office, Perintah)){
-			
+
 		} else if(isKataSama(kata_serve, Perintah)){
 
 		} else if(isKataSama(kata_repair, Perintah)){
@@ -1348,7 +1344,7 @@ int main() {
 					char input;
 					scanf("%c", &input);
 	                //Untuk Mengambil Input '\n' sehingga tidak terjadi input tidak dikenali
-	                scanf("%c", &dummyChar);					
+	                scanf("%c", &dummyChar);
 	                switch(input){
 	                	case 'A':
 	                		if(!wahanaSekitar[0]){
@@ -1397,7 +1393,7 @@ int main() {
 								}
 								printKata(ListWahana[i].Nama);
 								while(Next(aLL) != Nil){
-									aLL = Next(aLL);									
+									aLL = Next(aLL);
 									found = false;
 									i = 0;
 									while(!found){
@@ -1460,7 +1456,7 @@ int main() {
 								}
 								printKata(ListWahana[i].Nama);
 								while(Next(aLL) != Nil){
-									aLL = Next(aLL);									
+									aLL = Next(aLL);
 									found = false;
 									i = 0;
 									while(!found){
@@ -1474,7 +1470,7 @@ int main() {
 									}
 								}
 								printf(")\n");
-								printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);								
+								printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);
 							}
 							break;
 						case 'S':
@@ -1523,7 +1519,7 @@ int main() {
 								}
 								printKata(ListWahana[i].Nama);
 								while(Next(aLL) != Nil){
-									aLL = Next(aLL);									
+									aLL = Next(aLL);
 									found = false;
 									i = 0;
 									while(!found){
@@ -1537,9 +1533,9 @@ int main() {
 									}
 								}
 								printf(")\n");
-								printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);								
+								printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);
 							}
-							break;      	
+							break;
 						case 'D':
 	                		if(!wahanaSekitar[3]){
 	                			printf("Tidak ada wahana di lokasi ini\n");
@@ -1586,7 +1582,7 @@ int main() {
 								}
 								printKata(ListWahana[i].Nama);
 								while(Next(aLL) != Nil){
-									aLL = Next(aLL);									
+									aLL = Next(aLL);
 									found = false;
 									i = 0;
 									while(!found){
@@ -1600,14 +1596,14 @@ int main() {
 									}
 								}
 								printf(")\n");
-								printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);								
+								printf("Durasi wahana: %d menit\n", ListWahana[j].Durasi);
 							}
 							break;
 						default:
 							printf("Masukan Anda salah\n");
 							break;
 					}
-				}	
+				}
 			} else {
 				printf("Detail hanya dapat digunakan saat Fase Utama\n");
 			}

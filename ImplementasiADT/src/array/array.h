@@ -1,124 +1,43 @@
+/* ADT List untuk Bahan Bangunnan */
+/* Dengan versi eksplisit rata kiri */
+
 #ifndef ARRAY_H
 #define ARRAY_H
 
 #include "../Boolean/boolean.h"
-#include "../Point/point.h"
-
-/*  Kamus Umum */
-#define IdxMin 1
-/* Indeks minimum array */
-
-/* Definisi elemen dan koleksi objek */
-typedef int IdxType;  /* type indeks */
-typedef int ElType;   /* type elemen tabel */   // Jujur kurang ngerti
+#include "../Kata/ADT_kata.h"
 
 typedef struct {
-  char Nama;              /* Tipe Bahan Bangunan */
-  int Harga;                /* Harga Bahan Bangunan */
-  int Jumlah;               /* Jumlah per bahan */
+  Kata nama_bahan;              /* Tipe Bahan Bangunan */
+  int Harga;                    /* Harga Bahan Banguna */
 } info_bahan;
 
 typedef struct {
-  info_bahan *BI; /* memori tempat penyimpan elemen (container) */
-  int Neff;   /* >=0, banyaknya elemen efektif */
-  int MaxEl;  /* ukuran elemen */
-} Bahan;
+  info_bahan BI[10];            /* Kontainer untuk Bahan Bangunan, dengan ukuran default 10 */
+  int Neff;                     /* >=0, banyaknya elemen efektif */
+} List_Info_Bahan;
 
-/* Indeks yang digunakan [IdxMin..MaxEl] */
-/* Jika B adalah Bangunan, cara deklarasi dan akses: */
-/* Deklarasi : B : Bahan */
-/* Maka cara akses:
-   B.Neff  untuk mengetahui banyaknya elemen
-   B.BI    untuk mengakses seluruh nilai elemen tabel
-   B.BI[i] untuk mengakses elemen ke-i 
+extern List_Info_Bahan Daftar_Harga_Bahan; // --> Variabel global
 
-/* Definisi :
-   Tabel kosong: B.Neff = 0
-   Definisi elemen pertama : B.BI[i] dengan i=1
-   Definisi elemen terakhir yang terdefinisi: B.BI[i] dengan i=B.Neff */
+void makeEmpty(List_Info_Bahan B);
+/*
 
-/* ********** SELEKTOR ********** */
-/* B adalah Bahan, A adalah Aksi     */
-/* e adalah info_bahan dan info_aksi */
-#define Neff(B)       (B).Neff
-#define BI(B)         (B).BI
-#define ElmtBhn(B,i)  (B).BI[(i)]
-#define MaxEl(B)      (B).MaxEl
+*/
 
-/* e adalah info_bangunan */
-#define Nama(e)       (e).Nama
-#define Harga(e)     (e).Harga
-#define Jumlah(e)     (e).Jumlah
-
-// $ ********** KONSTRUKTOR **********
-
-// $ Konstruktor : create tabel kosong
-// * I.S. B sembarang, maxel > 0
-// * F.S. Terbentuk tabel B kosong dengan kapasitas maxel + 1
-void MakeEmptyBahan (Bahan * B, int maxel);
-
-// * I.S. B terdefinisi;
-// * F.S. BI(B) dikembalikan ke system, MaxEl(B)=0; Neff(B)=0
-void DealokBahan(Bahan *B);
-
-/* ********** SELEKTOR (TAMBAHAN) ********** */
-/* *** Banyaknya elemen *** */
-
-/* Mengirimkan banyaknya elemen efektif tabel */
-int NbElmtBhn (Bahan B);
-
-/* *** Selektor INDEKS *** */
-
-/* Prekondisi : Tabel B tidak kosong */
-/* Mengirimkan indeks elemen B pertama */
-IdxType GetFirstBhn (Bahan B);
-
-/* Prekondisi : Tabel B tidak kosong */
-/* Mengirimkan indeks elemen B terakhir */
-IdxType GetLastBhn (Bahan B);
-
-// * Mengirimkan harga bahan pada bahan (B,X)
-int GetHarga(Bahan B, IdxType X);
-
-/* ********** TEST KOSONG/PENUH ********** */
-/* *** Test tabel kosong *** */
-
-/* Mengirimkan true jika tabel B kosong, mengirimkan false jika tidak */
-boolean IsEmptyBhn(Bahan B);
-
-/* *** Test tabel penuh *** */
-
-/* Mengirimkan true jika tabel B penuh, mengirimkan false jika tidak */
-boolean IsFullBhn(Bahan B);
-
-/* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
 /* *** Mendefinisikan isi tabel dari pembacaan *** */
+void BacaBahan_dari_File(char string[]);
+/* I.S. Daftar_Harga_Barang kosong */
+/* F.S. Daftar_Harga_Barang terdefinisi terdefinisi */
+/* Proses: membaca isi file kemudian disimpan dalam Daftar_Harga_Barang, Neff menyesuaikan dengan jumlah bahan bangunan terbaca*/
 
-/* I.S. B sembarang */
-/* F.S. Tabel B terdefinisi */
-/* Prekondisi : Banyaknya elemen B itu valid */
-/* Proses : membaca banyaknya elemen B dan mengisi semua nilainya dengan Mesin Kata */
-void BacaBahan(Bahan * B);
-
-/*********************** Tentara Attack ****************************/
-
-/* Mengecek apakah bahan ke-X memiliki harga yang >= N */
-/* Jika benar maka true dan sebaliknya */
-boolean CekHarga(Bahan B, IdxType X, int N);
-
-/* Me-copy data-data Bahan */
-Bahan CopyBahan(Bahan B);
-
-void TulisIsiBahan (Bahan B);
-/* Proses : Menuliskan isi tabel dengan traversal */
-/* I.S. T boleh kosong */
-/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/*      Jika T kosong : Hanya menulis "Tabel kosong" */
-/* Contoh: Jika isi Tabel: [1, 20, 30, 50]
+void TulisIsiBahan (List_Info_Bahan B);
+/* Proses : Menuliskan isi tabel dengan traversal menurut Neff*/
+/* Contoh: Jika isi Tabel: [ [X, 20], [Y, 50] ]
    Maka tercetak di layar:
-   [1]1
-   [2]20
-   [3]30
-   [4]50 */
+    bla bla ...
+        1. X : 20
+        2. Y : 50
+        ...
+*/
 
 #endif
