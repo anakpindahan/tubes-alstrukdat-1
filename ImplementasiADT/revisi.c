@@ -393,6 +393,10 @@ int main() {
 
     ///// ///// ///// ///// /////
 
+    BacaBahan_dari_File("material.txt");
+
+    ///// ///// ///// ///// /////
+
     do {
         printf("\n");
 
@@ -644,7 +648,7 @@ int main() {
 				printf("Stack perintah Anda telah dikosongkan\n");
 	            setWaktu(&WaktuMain,9,0);
 	            GameStage.Phase = 1;
-				
+
 				// Menaruh antrean di peta kuadran 2
 				// Untuk sekarang asumsikan posisinya di pojok kiri atas
 				petaKuadran2.Isi[1][1] = 'A';
@@ -657,7 +661,7 @@ int main() {
 						DataPemain.SimbolPetak = '-';
 					}
 				}
-				
+
 	            system("cls");
 	            printStage();
 	            printPeta();
@@ -665,7 +669,7 @@ int main() {
 	            printf("Sekarang pukul: "); printDalamFormatWaktu(WaktuMain);
 	            printf("Tutup pukul: "); printDalamFormatWaktu(waktuTutup);
 	            selisih = selisihTerhadapWaktuMain(waktuTutup);
-	            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);	
+	            printf("Waktu tersisa: %d jam %d menit\n", selisih.Jam, selisih.Menit);
 			} else {
 				printf("Perintah ini hanya bisa dilakukan saat fase preparasi\n");
 			}
@@ -1128,7 +1132,7 @@ int main() {
 	            tambahWaktuManualP(durasiExecute, 0, 20);
 			}
 		} else if(isKataSama(kata_repair, Perintah)){
-			
+
 		} else if(isKataSama(kata_execute, Perintah)){
 			Tupel X;
 			if(diMainPhase(WaktuMain)){
@@ -1273,7 +1277,7 @@ int main() {
 					// Skip langsung ke MainPhase
 		            setWaktu(&WaktuMain,9,0);
 		            GameStage.Phase = 1;
-					
+
 					// idem main
 					if(BanyakWahanaDibangun > 0){
 						petaKuadran2.Isi[1][1] = 'A';
@@ -1286,14 +1290,14 @@ int main() {
 								DataPemain.SimbolPetak = '-';
 							}
 						}
-						
+
 						srand(time(0));
 						int r = rand();
 						r += r % (BanyakWahanaDibangun + 1);
-						
+
 					}
-					
-					
+
+
 		            system("cls");
 		            printStage();
 		            printPeta();
@@ -1318,7 +1322,7 @@ int main() {
 		} else if(isKataSama(kata_office, Perintah)){
 
 		} else if(isKataSama(kata_serve, Perintah)){
-			
+
 		} else if(isKataSama(kata_repair, Perintah)){
 
 		} else if(isKataSama(kata_detail, Perintah)){
