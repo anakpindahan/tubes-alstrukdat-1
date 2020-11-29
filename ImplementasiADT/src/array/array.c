@@ -15,7 +15,7 @@ void MakeEmptyBahan (Bahan * B, int maxel) {
   }
 }
 
-void DealBahan(Bahan *B) {
+void DealokBahan(Bahan *B) {
   /* KAMUS LOKAL */
 
   /* ALGORITMA */
@@ -90,4 +90,33 @@ Bahan CopyBahan (Bahan B){
   }
   Neff(P) = Neff(B);
 }
+}
+
+void TulisIsiBahan (Bahan B)
+/* Proses : Menuliskan isi tabel dengan traversal */
+/* I.S. T boleh kosong */
+/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
+/*      Jika T kosong : Hanya menulis "Tabel kosong" */
+/* Contoh: Jika isi Tabel: [1, 20, 30, 50]
+   Maka tercetak di layar:
+   [1]1
+   [2]20
+   [3]30
+   [4]50 */
+{
+	//Kamus
+	IdxType i;
+
+	//Algoritma
+	if (IsEmptyBhn(T) == true)
+	{
+		printf ("Tabel kosong\n");
+	}
+	else
+	{
+		for (i = GetFirstBhn(T); i <= GetLastBhn(T); i++)
+		{
+			printf("[%d] %-15s %-15d %-15d\n", i, Nama(ElmtBhn(B,i)), Harga(ElmtBhn(B,i)), Jumlah(ElmtBhn(B,i));
+		}
+	}
 }

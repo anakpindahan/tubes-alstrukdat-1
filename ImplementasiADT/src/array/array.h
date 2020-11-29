@@ -1,5 +1,3 @@
-/* ADT Array */
-
 #ifndef ARRAY_H
 #define ARRAY_H
 
@@ -47,7 +45,7 @@ typedef struct {
 #define ElmtBhn(B,i)  (B).BI[(i)]
 #define MaxEl(B)      (B).MaxEl
 
-/* e adalah info_bahan */
+/* e adalah info_bangunan */
 #define Nama(e)       (e).Nama
 #define Harga(e)     (e).Harga
 #define Jumlah(e)     (e).Jumlah
@@ -110,5 +108,17 @@ boolean CekHarga(Bahan B, IdxType X, int N);
 
 /* Me-copy data-data Bahan */
 Bahan CopyBahan(Bahan B);
+
+void TulisIsiBahan (Bahan B);
+/* Proses : Menuliskan isi tabel dengan traversal */
+/* I.S. T boleh kosong */
+/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
+/*      Jika T kosong : Hanya menulis "Tabel kosong" */
+/* Contoh: Jika isi Tabel: [1, 20, 30, 50]
+   Maka tercetak di layar:
+   [1]1
+   [2]20
+   [3]30
+   [4]50 */
 
 #endif
