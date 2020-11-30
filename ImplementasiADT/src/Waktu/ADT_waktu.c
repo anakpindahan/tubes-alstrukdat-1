@@ -100,3 +100,13 @@ Waktu selisihTerhadapWaktuMain(Waktu waktu) {
 boolean diMainPhase(Waktu waktu){
 	return((Jam(waktu) >= 9) && (Jam(waktu) < 21));
 }
+
+boolean WaktuSudahLewat(Waktu waktu1, Waktu waktu2){
+	if(Jam(waktu1) > Jam(waktu2)){
+		return(true);
+	} else if(Jam(waktu1) < Jam(waktu2)){
+		return(false);
+	} else {
+		return(Menit(waktu1) > Menit(waktu2));
+	}
+}

@@ -54,6 +54,11 @@ Inventory Inventaris;
 Graph GrafPeta;
 IDPetaUmum Identitas_Peta;
 
+typedef struct{
+	Pengunjung Pengunjung;
+	Waktu WaktuKeluar;
+} StatusPengunjung;
+
 typedef struct {
 	int Indeks;
 	int Tipe;
@@ -73,9 +78,15 @@ typedef struct{
 	int Kerusakan;
 	Kata Nama;
 	LinkedList Upgrade;
+	int SlotKosong;
+	int Kapasitas;
+	StatusPengunjung ListStatPengunjung[20];	
 } WahanaDibangun;
 
 WahanaDibangun ListWahanaDibangun[25];
+int BanyakWahanaDibangun;
+
+PrioQueue QueuePengunjung;
 
 typedef struct {
     char W;
@@ -125,7 +136,16 @@ void printInventaris() {
     printf("Polymerization Preparation: %d\n\n", Inventaris.BahanBangunan3);
 }
 
-
+void updatePengunjung(){
+	int i, j, k;
+	for(i = 0; i < BanyakWahanaDibangun; i++){
+		for(j = 0; j < (ListWahanaDibangun[i].Kapasitas - ListWahanaDibangun[i].SlotKosong); j++){
+			if(WaktuSudahLewat(ListWahanaDibangun[i].ListStatPengunjung[j].WaktuKeluar,WaktuMain)){
+				EnqueuePengunjung(&QueuePengunjung, ListWahanaDibangun[i].ListStatPengunjung[j].Pengunjung);
+			}
+		}
+	}
+}
 
 int main() {
 
@@ -353,6 +373,8 @@ int main() {
     Stack DaftarPerintahExec;
     BuatStack(&DaftarPerintah);
     BuatStack(&DaftarPerintahExec);
+
+	BuatQueue(&QueuePengunjung, 80);
 
     //// //// ///// ///// //////
 
@@ -825,7 +847,12 @@ int main() {
 					DataPemain.SimbolPetak = '-';
 				}
 			}
-
+			
+			Pengunjung X;
+			while(!QueueKosong(QueuePengunjung)){
+				DequeuePengunjung(&QueuePengunjung, &X);
+			}
+			
             system("cls");
             printStage();
             printPeta();
@@ -1369,6 +1396,8 @@ int main() {
 									i++;
 								} else {
 									NewWahana.Nama = ListWahana[i].Nama;
+									NewWahana.SlotKosong = ListWahana[i].Kapasitas;
+									NewWahana.Kapasitas = ListWahana[i].Kapasitas;
 									found = true;
 								}
 							}
@@ -1429,6 +1458,8 @@ int main() {
 									i++;
 								} else {
 									NewWahanaUp.Nama = ListWahana[i].Nama;
+									NewWahana.SlotKosong = ListWahana[i].Kapasitas;
+									NewWahana.Kapasitas = ListWahana[i].Kapasitas;
 									found = true;
 								}
 							}
@@ -1489,9 +1520,29 @@ int main() {
 						}
 					}
 
-					srand(time(0));
-					int r = rand();
-					r += r % (BanyakWahanaDibangun + 1);
+					// Buat antrean random, isinya 2-3 kali banyak wahana yang dibangun
+						
+				srand(time(0));
+				int r = rand();
+				r = 2*BanyakWahanaDibangun + (r % (BanyakWahanaDibangun + 1));
+					
+				Pengunjung MrX;
+					
+				int j, k, i;
+				for(j = 0; j < r; j++){
+					Prio(MrX) = (rand() % 100) + 1;
+					Sabar(MrX) = (rand() % 100) + 1;
+					Nomor(MrX) = j + 1;
+					k = rand() % 3;
+					for(i = 0; i <= k; i++){
+						NaikWahanaKei(MrX, i) = ListWahanaDibangun[rand() % BanyakWahanaDibangun].Indeks;
+					}
+					for(i = k + 1; i < 3; i++){
+						NaikWahanaKei(MrX, i) = 0;
+					}
+					EnqueuePengunjung(&QueuePengunjung, MrX);
+				}		
+				PrintPrioQueue(QueuePengunjung);
 
 				}
 		        system("cls");
@@ -1516,7 +1567,13 @@ int main() {
 		} else if(isKataSama(kata_office, Perintah)){
 			printf("Perintah ini hanya dapat dijalankan melalui office saja\n");
 		} else if(isKataSama(kata_serve, Perintah)){
-
+			if(!diMainPhase(WaktuMain)){
+				printf("Command ini hanya dapat digunakan saat fase utama\n");
+			} else if(BanyakAnggotaQueue(QueuePengunjung) == 0){
+				printf("Tidak ada pengunjung yang antri\n");
+			} else {
+				PrintPrioQueue(QueuePengunjung);
+			}
 		} else if(isKataSama(kata_repair, Perintah)){
 
 		} else if(isKataSama(kata_detail, Perintah)){

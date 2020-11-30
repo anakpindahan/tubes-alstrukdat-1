@@ -64,4 +64,9 @@ boolean diMainPhase(Waktu waktu);
     Mengembalikan true jika waktu ada dalam main phase, yaitu antara jam 09.00 sampai 21.00, false jika tidak
 */
 
+boolean WaktuSudahLewat(Waktu waktu1, Waktu waktu2);
+/*
+	Mengembalikan true jika waktu1 sudah melebihi waktu2. Diasumsikan bahwa kedua Waktu ini di Main Phase
+*/
+
 #endif
